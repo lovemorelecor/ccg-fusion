@@ -89,6 +89,16 @@
 .fusion-reveal-stagger[data-revealed="true"] .fusion-reveal-child:nth-child(5) { animation-delay: 280ms; }
 .fusion-reveal-stagger[data-revealed="true"] .fusion-reveal-child:nth-child(6) { animation-delay: 350ms; }
 
+/* Mega menu panel entrance */
+@keyframes fusion-mega-enter {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fusion-mega-panel {
+  animation: fusion-mega-enter 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* Search panel slide */
 .fusion-search-enter {
   animation: fusion-slide-down 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -116,7 +126,8 @@
 
   .fusion-search-enter,
   .fusion-search-exit,
-  .fusion-hero-slide-enter {
+  .fusion-hero-slide-enter,
+  .fusion-mega-panel {
     animation: none;
   }
 
@@ -170,6 +181,17 @@
   }
 }
 
+/* Nav: inherit CMS Design System font family for all nav text */
+.fusion-site-nav {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+}
+
+.fusion-site-nav button.fusion-mega-trigger {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-weight: 600;
+  cursor: pointer;
+}
+
 /* Nav + CTA: CMS global `a` / `a:visited` use --link__color; scope design tokens here. */
 /* Nav links: animated underline on hover */
 .fusion-site-nav a.fusion-site-nav__link,
@@ -209,6 +231,51 @@
 
 .fusion-site-nav a.fusion-site-nav__cta:hover {
   color: #003a8f;
+  text-decoration: none;
+}
+
+/* Need Support link */
+.fusion-site-nav a.fusion-site-nav__support,
+.fusion-site-nav a.fusion-site-nav__support:visited {
+  color: #003a8f;
+  text-decoration: none;
+}
+
+.fusion-site-nav a.fusion-site-nav__support:hover {
+  color: #002d6e;
+  text-decoration: none;
+}
+
+/* Mega menu links */
+.fusion-mega-link,
+.fusion-mega-link:visited {
+  color: #003a8f;
+  text-decoration: none;
+}
+
+.fusion-mega-link:hover {
+  color: #002d6e;
+  text-decoration: none;
+}
+
+/* Mega menu featured card */
+h2.fusion-mega-featured__title {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #0a0a0a;
+  margin: 0;
+}
+
+.fusion-mega-featured__cta,
+.fusion-mega-featured__cta:visited {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.fusion-mega-featured__cta:hover {
+  color: #ffffff;
   text-decoration: none;
 }
 

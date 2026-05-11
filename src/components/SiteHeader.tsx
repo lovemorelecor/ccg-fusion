@@ -6,13 +6,24 @@ import { SiteSearchPanel } from './SiteSearchPanel'
 export function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [activeMenu, setActiveMenu] = useState<string | null>(null)
 
   const onSearchToggle = useCallback(() => {
     setSearchOpen((open) => !open)
+    setActiveMenu(null)
   }, [])
 
   const closeSearch = useCallback(() => {
     setSearchOpen(false)
+  }, [])
+
+  const onMenuToggle = useCallback((id: string) => {
+    setActiveMenu((current) => (current === id ? null : id))
+    setSearchOpen(false)
+  }, [])
+
+  const onMenuClose = useCallback(() => {
+    setActiveMenu(null)
   }, [])
 
   useEffect(() => {
@@ -37,6 +48,9 @@ export function SiteHeader() {
         <FusionSiteNav
           searchOpen={searchOpen}
           onSearchToggle={onSearchToggle}
+          activeMenu={activeMenu}
+          onMenuToggle={onMenuToggle}
+          onMenuClose={onMenuClose}
         />
         <SiteSearchPanel open={searchOpen} onClose={closeSearch} />
       </div>
