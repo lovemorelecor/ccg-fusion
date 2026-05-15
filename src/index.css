@@ -31,6 +31,12 @@
 
   /* Figma Apps frame 370:41247 — matte blue sampled from export PNG (flat regions outside glow) */
   --fusion-multi-cloud-bg: #002980;
+
+  /* Sticky main nav (~py-3 + logo); breadcrumb bars sit directly beneath when scrolling */
+  --fusion-nav-sticky-height: 5rem;
+  --fusion-breadcrumb-bar-height: 2.75rem;
+  --fusion-sticky-stack-top: calc(var(--fusion-nav-sticky-height) + var(--fusion-breadcrumb-bar-height));
+  --fusion-breadcrumb-sticky-z: 55;
 }
 
 @media (min-width: 1536px) {
@@ -602,6 +608,14 @@ h2.fusion-mega-featured__title {
 /* ─── Knowledge Center Page ──────────────────────────────────────────────── */
 
 /* Breadcrumb Bar */
+.kc-breadcrumb-bar,
+.ktd-breadcrumb-bar,
+.ddoc-breadcrumb-bar {
+  position: sticky;
+  top: var(--fusion-nav-sticky-height);
+  z-index: var(--fusion-breadcrumb-sticky-z);
+}
+
 .kc-breadcrumb-bar {
   background-color: #003a8f;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -2135,6 +2149,7 @@ h3.init-step__title {
 .ktd-breadcrumb-bar {
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
 .ktd-breadcrumb-inner {
@@ -2212,6 +2227,148 @@ ol.ktd-breadcrumb-list li {
   color: rgba(255, 255, 255, 0.9);
   margin: 20px 0 0;
   max-width: 768px;
+}
+
+/* Condensed DevOps landing (Figma Concept7) */
+.ktd-hero--compact .ktd-hero__inner--compact {
+  padding: 40px 32px 48px;
+}
+
+.ktd-hero--compact .ktd-hero__title {
+  font-size: 36px;
+  font-weight: 500;
+}
+
+.ktd-hero--compact .ktd-hero__lead {
+  font-size: 18px;
+  line-height: 1.55;
+  margin-top: 16px;
+}
+
+.ktd-body--compact {
+  padding: 48px 0 56px;
+}
+
+.ktd-body--compact .ktd-body__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.ktd-topics-panel {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 32px;
+  box-shadow: 0 1px 1.5px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.06);
+}
+
+h2.ktd-topics-panel__title {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-size: 24px;
+  font-weight: 500;
+  color: #003a8f;
+  margin: 0 0 24px;
+  line-height: 1.25;
+}
+
+.ktd-topics-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.ktd-topic-row,
+.ktd-topic-row:visited {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 60px;
+  padding: 18px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  background: #ffffff;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.ktd-topic-row:hover {
+  border-color: #005ea2;
+  background: #f8fafc;
+  text-decoration: none;
+}
+
+.ktd-topic-row__label {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-size: 16px;
+  font-weight: 500;
+  color: #003a8f;
+  line-height: 1.35;
+}
+
+.ktd-topic-row__chev {
+  flex-shrink: 0;
+  color: #9ca3af;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.ktd-topic-row:hover .ktd-topic-row__chev {
+  color: #005ea2;
+  transform: translateX(2px);
+}
+
+.ktd-help-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 24px;
+  padding: 32px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #003a8f 0%, #005ea2 100%);
+}
+
+.ktd-help-bar__title {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ktd-help-bar__desc {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 8px 0 0;
+}
+
+.ktd-help-bar__btn,
+.ktd-help-bar__btn:visited {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 4px;
+  background: #ffb81c;
+  color: #003a8f;
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: filter 0.15s ease;
+}
+
+.ktd-help-bar__btn:hover {
+  filter: brightness(1.05);
+  text-decoration: none;
 }
 
 .ktd-hero__stats {
@@ -2580,6 +2737,10 @@ ol.ktd-breadcrumb-list li {
     grid-template-columns: 1fr;
   }
 
+  .ktd-topics-list {
+    grid-template-columns: 1fr;
+  }
+
   .ktd-related__grid {
     grid-template-columns: 1fr;
   }
@@ -2601,6 +2762,25 @@ ol.ktd-breadcrumb-list li {
   .ktd-hero__lead {
     font-size: 17px;
   }
+
+  .ktd-hero--compact .ktd-hero__inner--compact {
+    padding-left: var(--fusion-site-padding-x);
+    padding-right: var(--fusion-site-padding-x);
+  }
+
+  .ktd-topics-panel {
+    padding: 24px var(--fusion-site-padding-x);
+  }
+
+  .ktd-help-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px var(--fusion-site-padding-x);
+  }
+
+  .ktd-help-bar__btn {
+    width: 100%;
+  }
 }
 
 /* ─── Documentation detail (e.g. Maven Integration) ───────────────────────── */
@@ -2608,6 +2788,7 @@ ol.ktd-breadcrumb-list li {
 .ddoc-breadcrumb-bar {
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
 .ddoc-breadcrumb-inner {
@@ -2706,7 +2887,7 @@ ol.ddoc-breadcrumb-list li {
 .ddoc-sidebar__card {
   padding: 12px 12px 8px;
   position: sticky;
-  top: 96px;
+  top: var(--fusion-sticky-stack-top);
 }
 
 .ddoc-side-nav {
@@ -2841,7 +3022,7 @@ ol.ddoc-breadcrumb-list li {
 }
 
 .ddoc-article__h2 {
-  scroll-margin-top: 96px;
+  scroll-margin-top: var(--fusion-sticky-stack-top);
   font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
   font-size: 24px;
   font-weight: 500;
@@ -3040,7 +3221,7 @@ ol.ddoc-breadcrumb-list li {
   flex-direction: column;
   gap: 20px;
   position: sticky;
-  top: 96px;
+  top: var(--fusion-sticky-stack-top);
 }
 
 .ddoc-rail__card {
