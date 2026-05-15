@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { SearchIcon } from './SearchIcon'
 
 type MenuLink = { label: string; href: string }
@@ -109,7 +110,8 @@ const megaMenuItems: MegaMenuItem[] = [
     columns: [
       {
         links: [
-          { label: 'Knowledge Center', href: '#knowledge-center' },
+          { label: 'Knowledge Center', href: '/learn/knowledge-center' },
+          { label: 'Initiatives', href: '/learn/initiatives' },
           { label: 'Training & Enablement', href: '#training-enablement' },
           { label: 'Customer Roadmap', href: '#customer-roadmap' },
         ],
@@ -202,6 +204,20 @@ export function FusionSiteNav({
   onMenuClose,
 }: FusionSiteNavProps) {
   const navRef = useRef<HTMLDivElement>(null)
+  const navigate = useNavigate()
+
+  const handleLinkClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (href.startsWith('/')) {
+        e.preventDefault()
+        onMenuClose()
+        navigate(href)
+      } else {
+        onMenuClose()
+      }
+    },
+    [navigate, onMenuClose],
+  )
 
   const handleSearchClick = useCallback(() => {
     onMenuClose()
@@ -348,7 +364,7 @@ export function FusionSiteNav({
                 className={`fusion-mega-featured__cta mt-6 inline-flex items-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-colors ${
                   ctaVariantClasses[activeItem.featured.ctaVariant]
                 }`}
-                onClick={onMenuClose}
+                onClick={(e) => handleLinkClick(e, activeItem.featured.ctaHref)}
               >
                 {activeItem.featured.ctaLabel}
                 <span aria-hidden>&#8594;</span>
@@ -374,7 +390,7 @@ export function FusionSiteNav({
                         <a
                           href={link.href}
                           className="fusion-mega-link group inline-flex items-center gap-1.5 text-[0.9375rem] font-semibold text-[#003a8f] transition-colors hover:text-[#002d6e]"
-                          onClick={onMenuClose}
+                          onClick={(e) => handleLinkClick(e, link.href)}
                         >
                           {link.label}
                           <svg
