@@ -48,6 +48,7 @@ export function SiteHeader() {
         <FusionSiteNav
           searchOpen={searchOpen}
           onSearchToggle={onSearchToggle}
+          onSearchClose={closeSearch}
           activeMenu={activeMenu}
           onMenuToggle={onMenuToggle}
           onMenuClose={onMenuClose}

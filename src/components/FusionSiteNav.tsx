@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FusionButton } from './FusionButton'
 import { SearchIcon } from './SearchIcon'
@@ -181,9 +181,27 @@ function SparkleIcon({ className }: { className?: string }) {
   )
 }
 
+function IconMenu() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function IconMenuClose() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth={2} strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export type FusionSiteNavProps = {
   searchOpen: boolean
   onSearchToggle: () => void
+  /** Close search panel without toggling (e.g. when opening mobile nav). */
+  onSearchClose: () => void
   activeMenu: string | null
   onMenuToggle: (id: string) => void
   onMenuClose: () => void
@@ -192,15 +210,18 @@ export type FusionSiteNavProps = {
 export function FusionSiteNav({
   searchOpen,
   onSearchToggle,
+  onSearchClose,
   activeMenu,
   onMenuToggle,
   onMenuClose,
 }: FusionSiteNavProps) {
   const navRef = useRef<HTMLDivElement>(null)
   const navigate = useNavigate()
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
 
   const handleLinkClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    (e: React.MouseEvent<Element>, href: string) => {
+      setMobileDrawerOpen(false)
       if (href.startsWith('/')) {
         e.preventDefault()
         onMenuClose()
@@ -212,35 +233,69 @@ export function FusionSiteNav({
     [navigate, onMenuClose],
   )
 
+  const toggleMobileDrawer = useCallback(() => {
+    setMobileDrawerOpen((open) => {
+      const next = !open
+      if (next) {
+        onSearchClose()
+        onMenuClose()
+      }
+      return next
+    })
+  }, [onMenuClose, onSearchClose])
+
   const handleSearchClick = useCallback(() => {
+    setMobileDrawerOpen(false)
     onMenuClose()
     onSearchToggle()
   }, [onMenuClose, onSearchToggle])
 
   useEffect(() => {
-    if (!activeMenu) return
+    if (!activeMenu && !mobileDrawerOpen) return
     const handler = (e: MouseEvent) => {
       if (navRef.current && !navRef.current.contains(e.target as Node)) {
         onMenuClose()
+        setMobileDrawerOpen(false)
       }
     }
     document.addEventListener('mousedown', handler)
     return () => document.removeEventListener('mousedown', handler)
-  }, [activeMenu, onMenuClose])
+  }, [activeMenu, mobileDrawerOpen, onMenuClose])
 
   useEffect(() => {
-    if (!activeMenu) return
+    if (!activeMenu && !mobileDrawerOpen) return
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onMenuClose()
+      if (e.key === 'Escape') {
+        onMenuClose()
+        setMobileDrawerOpen(false)
+      }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [activeMenu, onMenuClose])
+  }, [activeMenu, mobileDrawerOpen, onMenuClose])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const onMq = () => {
+      if (mq.matches) setMobileDrawerOpen(false)
+    }
+    mq.addEventListener('change', onMq)
+    return () => mq.removeEventListener('change', onMq)
+  }, [])
+
+  useEffect(() => {
+    if (!mobileDrawerOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [mobileDrawerOpen])
 
   const activeItem = megaMenuItems.find((item) => item.id === activeMenu)
 
   return (
-    <div className="fusion-site-nav" ref={navRef}>
+    <div className="fusion-site-nav relative" ref={navRef}>
       <div className="mx-auto flex max-w-[var(--fusion-site-max-width)] items-center justify-between px-[var(--fusion-site-padding-x)] py-3 md:px-[var(--fusion-site-padding-x-md)]">
         {/* Logo */}
         <a
@@ -297,7 +352,19 @@ export function FusionSiteNav({
         </nav>
 
         {/* Right actions */}
-        <div className="flex shrink-0 items-center gap-3">
+        {/* Mobile menu */}
+        <div className="flex shrink-0 items-center gap-2 md:gap-3">
+          <button
+            type="button"
+            className="fusion-site-nav__menu-btn flex size-10 items-center justify-center rounded-lg border border-neutral-200 bg-white p-2 text-[color:var(--fusion-blue)] shadow-sm md:hidden"
+            aria-expanded={mobileDrawerOpen}
+            aria-controls="fusion-site-nav-mobile-drawer"
+            aria-label={mobileDrawerOpen ? 'Close menu' : 'Open menu'}
+            onClick={toggleMobileDrawer}
+          >
+            {mobileDrawerOpen ? <IconMenuClose /> : <IconMenu />}
+          </button>
+
           <button
             type="button"
             className={`flex size-10 items-center justify-center rounded-lg border-0 p-2 text-[color:var(--fusion-blue)] transition-colors hover:bg-neutral-100 ${
@@ -327,12 +394,60 @@ export function FusionSiteNav({
         </div>
       </div>
 
+      {/* Mobile primary navigation (< md) */}
+      <div
+        id="fusion-site-nav-mobile-drawer"
+        className="fusion-site-nav__mobile-drawer md:hidden"
+        hidden={!mobileDrawerOpen}
+      >
+        <nav aria-label="Primary sections" className="fusion-site-nav__mobile-nav">
+          {megaMenuItems.map((item) => (
+            <details key={item.id} className="fusion-site-nav__mobile-details">
+              <summary className="fusion-site-nav__mobile-summary">{item.label}</summary>
+              <div className="fusion-site-nav__mobile-panel">
+                <h3 className="fusion-site-nav__mobile-featured-title">{item.featured.title}</h3>
+                <p className="fusion-site-nav__mobile-featured-desc">{item.featured.description}</p>
+                <FusionButton
+                  href={item.featured.ctaHref}
+                  className="fusion-site-nav__mobile-featured-cta"
+                  size="small"
+                  onClick={(e) => handleLinkClick(e, item.featured.ctaHref)}
+                  {...megaMenuCtaProps(item.featured.ctaVariant)}
+                >
+                  {item.featured.ctaLabel}
+                </FusionButton>
+                {item.columns.map((col, ci) => (
+                  <div key={ci} className="fusion-site-nav__mobile-col">
+                    {col.title ? (
+                      <h4 className="fusion-site-nav__mobile-col-title">{col.title}</h4>
+                    ) : null}
+                    <ul className="fusion-site-nav__mobile-link-list">
+                      {col.links.map((link) => (
+                        <li key={`${item.id}-${link.label}-${link.href}`}>
+                          <a
+                            href={link.href}
+                            className="fusion-site-nav__mobile-link"
+                            onClick={(e) => handleLinkClick(e, link.href)}
+                          >
+                            {link.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </details>
+          ))}
+        </nav>
+      </div>
+
       {/* Mega menu panels */}
       {activeItem && (
         <div
           key={activeItem.id}
           id={`mega-panel-${activeItem.id}`}
-          className="fusion-mega-panel"
+          className="fusion-mega-panel hidden md:block"
           role="region"
           aria-label={`${activeItem.label} menu`}
         >

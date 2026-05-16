@@ -1,4 +1,5 @@
-﻿import { useScrollReveal } from '../hooks/useScrollReveal'
+﻿import { useNavigate } from 'react-router-dom'
+import { useScrollReveal } from '../hooks/useScrollReveal'
 
 /** “How can we help you today?” — staggered pill pathways */
 const pathways = [
@@ -17,7 +18,7 @@ const pathways = [
   {
     id: 'guidance',
     title: 'I Need Guidance',
-    href: '#guidance',
+    href: '/learn/knowledge-center',
     Icon: IconStopwatch,
   },
   {
@@ -35,6 +36,54 @@ const pathways = [
   },
 ] as const
 
+type PathwayCard = (typeof pathways)[number]
+
+function PathwayPill({ card, compact }: { card: PathwayCard; compact: boolean }) {
+  const navigate = useNavigate()
+
+  const iconWrapClass =
+    'iconWrapSupport' in card && card.iconWrapSupport
+      ? 'fusion-pathways-help__pill-icon-wrap fusion-pathways-help__pill-icon-wrap--support'
+      : 'fusion-pathways-help__pill-icon-wrap'
+
+  const className = compact
+    ? 'fusion-pathways-help__pill fusion-pathways-help__pill--compact fusion-reveal-child'
+    : 'fusion-pathways-help__pill fusion-reveal-child'
+
+  const inner = (
+    <>
+      <span className={iconWrapClass} aria-hidden>
+        <card.Icon className="fusion-pathways-help__pill-icon" />
+      </span>
+      <span className="fusion-pathways-help__pill-label">{card.title}</span>
+      <ChevronRight className="fusion-pathways-help__pill-chevron" />
+    </>
+  )
+
+  if (card.href.startsWith('/')) {
+    return (
+      <a
+        href={card.href}
+        className={className}
+        onClick={(e) => {
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+          if (e.button !== 0) return
+          e.preventDefault()
+          navigate(card.href)
+        }}
+      >
+        {inner}
+      </a>
+    )
+  }
+
+  return (
+    <a href={card.href} className={className}>
+      {inner}
+    </a>
+  )
+}
+
 export function FusionPathwaysHelp() {
   const headerRef = useScrollReveal<HTMLElement>()
   const rowsRef = useScrollReveal<HTMLDivElement>({ threshold: 0.08, rootMargin: '0px 0px -20px 0px' })
@@ -43,6 +92,7 @@ export function FusionPathwaysHelp() {
 
   return (
     <section
+      id="pathways"
       className="fusion-pathways-help fusion-band-gradient-primary-mist relative overflow-hidden"
       aria-labelledby="fusion-pathways-heading"
     >
@@ -71,42 +121,12 @@ export function FusionPathwaysHelp() {
         <div ref={rowsRef} className="fusion-pathways-help__layout fusion-reveal-stagger">
           <div className="fusion-pathways-help__row fusion-pathways-help__row--two">
             {row1.map((card) => (
-              <a key={card.id} href={card.href} className="fusion-pathways-help__pill fusion-reveal-child">
-                <span
-                  className={
-                    'iconWrapSupport' in card && card.iconWrapSupport
-                      ? 'fusion-pathways-help__pill-icon-wrap fusion-pathways-help__pill-icon-wrap--support'
-                      : 'fusion-pathways-help__pill-icon-wrap'
-                  }
-                  aria-hidden
-                >
-                  <card.Icon className="fusion-pathways-help__pill-icon" />
-                </span>
-                <span className="fusion-pathways-help__pill-label">{card.title}</span>
-                <ChevronRight className="fusion-pathways-help__pill-chevron" />
-              </a>
+              <PathwayPill key={card.id} card={card} compact={false} />
             ))}
           </div>
           <div className="fusion-pathways-help__row fusion-pathways-help__row--three">
             {row2.map((card) => (
-              <a
-                key={card.id}
-                href={card.href}
-                className="fusion-pathways-help__pill fusion-pathways-help__pill--compact fusion-reveal-child"
-              >
-                <span
-                  className={
-                    'iconWrapSupport' in card && card.iconWrapSupport
-                      ? 'fusion-pathways-help__pill-icon-wrap fusion-pathways-help__pill-icon-wrap--support'
-                      : 'fusion-pathways-help__pill-icon-wrap'
-                  }
-                  aria-hidden
-                >
-                  <card.Icon className="fusion-pathways-help__pill-icon" />
-                </span>
-                <span className="fusion-pathways-help__pill-label">{card.title}</span>
-                <ChevronRight className="fusion-pathways-help__pill-chevron" />
-              </a>
+              <PathwayPill key={card.id} card={card} compact />
             ))}
           </div>
         </div>
