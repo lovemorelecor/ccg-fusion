@@ -4,13 +4,11 @@ import { fusionToolkitProducts } from '../../data/fusionToolkitContent'
 
 export const fusionToolkitSectionIds = [
   'overview',
-  'toolkit-grid',
   ...fusionToolkitProducts.map((p) => p.id),
 ]
 
 const navItems = [
   { id: 'overview', label: 'Overview' },
-  { id: 'toolkit-grid', label: 'Toolkit' },
   ...fusionToolkitProducts.map((p) => ({ id: p.id, label: p.name })),
 ]
 
@@ -55,8 +53,22 @@ export function FusionToolkitStickyNav() {
   const [activeId, setActiveId] = useState('overview')
   const activeIdRef = useRef(activeId)
   const rafRef = useRef<number | null>(null)
+  const pendingTargetRef = useRef<string | null>(null)
 
   const updateActiveSection = useCallback(() => {
+    const pendingTargetId = pendingTargetRef.current
+    if (pendingTargetId) {
+      const pendingEl = document.getElementById(pendingTargetId)
+      if (pendingEl) {
+        const offset = getScrollSpyOffset()
+        // Keep clicked tab active until its section reaches the sticky stack line.
+        if (pendingEl.getBoundingClientRect().top > offset + 4) {
+          return
+        }
+      }
+      pendingTargetRef.current = null
+    }
+
     const next = pickActiveSection(fusionToolkitSectionIds)
     if (next !== activeIdRef.current) {
       activeIdRef.current = next
@@ -120,6 +132,7 @@ export function FusionToolkitStickyNav() {
   const handleNavClick = (id: string) => {
     const target = document.getElementById(id)
     if (!target) return
+    pendingTargetRef.current = id
     activeIdRef.current = id
     setActiveId(id)
     target.scrollIntoView({ behavior: 'smooth', block: 'start' })

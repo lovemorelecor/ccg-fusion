@@ -8,15 +8,6 @@ import { SiteHeader } from '../components/SiteHeader'
 const platforms = [
   {
     num: '01',
-    tag: 'Connect',
-    tagGradient:
-      'linear-gradient(135deg, var(--color-primary-lightest) 0%, var(--color-primary-light) 45%, var(--color-primary) 100%)',
-    title: 'Amazon Connect',
-    description:
-      'Amazon Connect will provide a secure, scalable shared service with layered flexibility, safeguards, and cost transparency.',
-  },
-  {
-    num: '02',
     tag: 'AWS',
     tagGradient:
       'linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 50%, var(--color-primary-darker) 100%)',
@@ -25,7 +16,7 @@ const platforms = [
       'Moves applications currently hosted in AWS GovCloud—a specialized, highly secure cloud environment designed for government workloads—to the standard AWS Commercial cloud environment.',
   },
   {
-    num: '03',
+    num: '02',
     tag: 'Azure',
     tagGradient:
       'linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-darker) 55%, var(--color-primary-darkest) 100%)',
@@ -34,16 +25,7 @@ const platforms = [
       'Migrating applications and services from the Microsoft Azure for Government environment to the Azure Commercial cloud platform for improved support and reduced friction between environments.',
   },
   {
-    num: '04',
-    tag: 'Azure',
-    tagGradient:
-      'linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary) 100%)',
-    title: 'Azure VDI Pilot',
-    description:
-      'Implementation of a cloud-based solution provided by Microsoft Azure that enables organizations to deliver virtual desktops and applications to users over the internet. With Azure VDI, users can securely access their...',
-  },
-  {
-    num: '05',
+    num: '03',
     tag: 'AWS',
     tagGradient:
       'linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary) 100%)',
@@ -52,7 +34,7 @@ const platforms = [
       "Migrating the Managed Infrastructure Service Provider's managed applications from their current on-prem IaaS x86 infrastructure to AWS Outpost.",
   },
   {
-    num: '06',
+    num: '04',
     tag: 'Oracle',
     tagGradient:
       'linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary) 100%)',
@@ -61,13 +43,22 @@ const platforms = [
       "Addition of Oracle's hosting solution that brings the capabilities of Oracle Cloud Infrastructure (OCI) directly into an organization's physical data center.",
   },
   {
-    num: '07',
+    num: '05',
     tag: 'Google',
     tagGradient:
       'linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-primary-dark) 100%)',
     title: 'Google Cloud (GCP)',
     description:
       'The GCP Hosting Initiative aims to establish Google Cloud Platform as a full hosting environment, while supporting critical workloads like chat.cms.gov while leveraging select shared services from AWS.',
+  },
+  {
+    num: '06',
+    tag: 'Oracle',
+    tagGradient:
+      'linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-secondary) 100%)',
+    title: 'Oracle Cloud Infrastructure',
+    description:
+      'Oracle Cloud Infrastructure (OCI) for Oracle-centric workloads and enterprise database hosting.',
   },
 ]
 

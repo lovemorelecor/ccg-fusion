@@ -6395,6 +6395,92 @@ ol.ddoc-breadcrumb-list li {
   padding-top: 0;
 }
 
+/* 3-column left nav — match 2-column visual style, keep nested chevrons */
+.tpl-3col-shell .ddoc-sidebar__card {
+  padding: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-lighter);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.tpl-3col-shell .ddoc-side-nav {
+  gap: 0;
+}
+
+.tpl-3col-shell .ddoc-side-nav__row,
+.tpl-3col-shell .ddoc-side-nav__group-header {
+  min-height: 44px;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--color-gray-lighter);
+  border-left: 3px solid transparent;
+  border-radius: 0;
+  background: var(--color-white);
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  color: var(--color-gray-dark);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.tpl-3col-shell .ddoc-side-nav__group-header {
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+}
+
+.tpl-3col-shell .ddoc-side-nav__group-title {
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: inherit;
+}
+
+.tpl-3col-shell .ddoc-side-nav__row:hover:not(.ddoc-side-nav__row--active),
+.tpl-3col-shell .ddoc-side-nav__group-header:hover {
+  background: color-mix(in srgb, var(--color-primary-lightest) 40%, var(--color-white));
+  color: var(--color-primary-darker);
+}
+
+.tpl-3col-shell .ddoc-side-nav__row--active,
+.tpl-3col-shell .ddoc-side-nav__row--active:visited {
+  font-weight: 700;
+  color: var(--color-primary-darkest);
+  background: var(--color-primary-lightest);
+  border-left-color: var(--color-primary);
+}
+
+.tpl-3col-shell .ddoc-side-nav__sub {
+  margin: 0;
+  padding: 0;
+  gap: 0;
+}
+
+.tpl-3col-shell .ddoc-side-nav__sub > li:not(:last-child) {
+  border-bottom: 1px solid var(--color-gray-lighter);
+}
+
+.tpl-3col-shell .ddoc-side-nav__sublink,
+.tpl-3col-shell .ddoc-side-nav__sublink:visited {
+  padding: 0.75rem 1rem 0.75rem 1.5rem;
+  border-radius: 0;
+  color: var(--color-gray-dark);
+}
+
+.tpl-3col-shell .ddoc-side-nav__sublink:hover {
+  background: color-mix(in srgb, var(--color-primary-lightest) 40%, var(--color-white));
+  color: var(--color-primary-darker);
+}
+
+.tpl-3col-shell .ddoc-side-nav__sublink--active,
+.tpl-3col-shell .ddoc-side-nav__sublink--active:visited {
+  font-weight: 700;
+  color: var(--color-primary-darkest);
+  background: var(--color-primary-lightest);
+  border-left: 3px solid var(--color-primary);
+  padding-left: calc(1.5rem - 3px);
+}
+
 .tpl-3col-page-header {
   margin-bottom: 24px;
 }

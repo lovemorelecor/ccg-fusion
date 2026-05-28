@@ -58,8 +58,46 @@ function sortMenuItems(items: NavMenuItem[]): NavMenuItem[] {
   return items.map((item) => ({
     ...item,
     categories: [...item.categories]
-      .map((category) => ({ ...category, panel: sortPanel(category.panel) }))
-      .sort((a, b) => alpha.compare(a.label, b.label)),
+      .map((category) => {
+        if (item.id === 'about' && category.id === 'about-hybrid-cloud') {
+          return category
+        }
+        return { ...category, panel: sortPanel(category.panel) }
+      })
+      .sort((a, b) => {
+        if (item.id === 'learn') {
+          const order: Record<string, number> = {
+            'knowledge-center': 0,
+            'training-enablement': 1,
+            'customer-roadmap': 2,
+          }
+          const rankA = order[a.id] ?? Number.MAX_SAFE_INTEGER
+          const rankB = order[b.id] ?? Number.MAX_SAFE_INTEGER
+          return rankA - rankB
+        }
+
+        if (item.id === 'explore') {
+          const order: Record<string, number> = {
+            platforms: 0,
+            'fusion-toolkit': 1,
+            'shared-services': 2,
+          }
+          const rankA = order[a.id] ?? Number.MAX_SAFE_INTEGER
+          const rankB = order[b.id] ?? Number.MAX_SAFE_INTEGER
+          return rankA - rankB
+        }
+
+        if (item.id === 'get-started') {
+          const order: Record<string, number> = {
+            'new-onboarding': 0,
+            migrate: 1,
+          }
+          const rankA = order[a.id] ?? Number.MAX_SAFE_INTEGER
+          const rankB = order[b.id] ?? Number.MAX_SAFE_INTEGER
+          return rankA - rankB
+        }
+        return alpha.compare(a.label, b.label)
+      }),
   }))
 }
 
@@ -314,11 +352,6 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
             'AWS Base',
           ),
         },
-      },
-      {
-        id: 'onboarding-faq',
-        label: 'Onboarding FAQ',
-        panel: { type: 'empty' },
       },
     ],
   },
