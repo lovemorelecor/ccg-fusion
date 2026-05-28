@@ -94,7 +94,15 @@ export const fusionToolkitProducts: FusionToolkitProduct[] = [
 
 export const fusionToolkitPath = '/explore/fusion-toolkit'
 
-export const fusionToolkitNavLinks = fusionToolkitProducts.map((product) => ({
-  label: product.name,
-  href: `${fusionToolkitPath}#${product.id}`,
-}))
+export const fusionToolkitOverviewNavLink = {
+  label: 'Overview',
+  href: `${fusionToolkitPath}#overview`,
+}
+
+export const fusionToolkitNavLinks = [
+  fusionToolkitOverviewNavLink,
+  ...fusionToolkitProducts.map((product) => ({
+    label: product.name,
+    href: `${fusionToolkitPath}#${product.id}`,
+  })),
+]

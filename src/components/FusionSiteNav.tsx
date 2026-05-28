@@ -71,6 +71,7 @@ const megaMenuItems: MegaMenuItem[] = [
       {
         title: 'Fusion Toolkit',
         links: [
+          { label: 'Overview', href: '/explore/fusion-toolkit#overview' },
           { label: 'BaseCamp', href: '/explore/fusion-toolkit#basecamp' },
           { label: 'Helix', href: '/explore/fusion-toolkit#helix' },
           { label: 'Lens', href: '/explore/fusion-toolkit#lens' },

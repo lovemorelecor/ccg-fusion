@@ -93,11 +93,65 @@ function MegaMoreButton({
   )
 }
 
-function RightPanel({
+function firstRoutableHref(links: { href: string }[]): string | undefined {
+  return links.find((item) => item.href && item.href !== '#')?.href
+}
+
+function getCategoryHref(category: NavCategory, menuItem: NavMenuItem): string {
+  if (category.href) {
+    return category.href
+  }
+
+  const { panel } = category
+  if (panel.type === 'list') {
+    return firstRoutableHref(panel.links) ?? menuItem.href
+  }
+  if (panel.type === 'cards') {
+    return firstRoutableHref(panel.links) ?? menuItem.href
+  }
+  if (panel.type === 'columns') {
+    for (const col of panel.columns) {
+      const href = firstRoutableHref(col.links)
+      if (href) {
+        return href
+      }
+    }
+  }
+
+  return menuItem.href
+}
+
+function PanelCategoryTitle({
   category,
+  menuItem,
   onNavigate,
 }: {
   category: NavCategory
+  menuItem: NavMenuItem
+  onNavigate: (e: React.MouseEvent, href: string) => void
+}) {
+  const href = getCategoryHref(category, menuItem)
+
+  return (
+    <h3 className="fusion-nav-v2__panel-title">
+      <a
+        href={href}
+        className="fusion-nav-v2__panel-title-link"
+        onClick={(e) => onNavigate(e, href)}
+      >
+        {category.label}
+      </a>
+    </h3>
+  )
+}
+
+function RightPanel({
+  category,
+  menuItem,
+  onNavigate,
+}: {
+  category: NavCategory
+  menuItem: NavMenuItem
   onNavigate: (e: React.MouseEvent, href: string) => void
 }) {
   const { panel } = category
@@ -108,11 +162,7 @@ function RightPanel({
   if (panel.type === 'empty') {
     return (
       <div className="fusion-nav-v2__panel-content" key={category.id}>
-        <ul className="fusion-nav-v2__link-list">
-          <li>
-            <MegaLink label={category.label} href="#" onNavigate={onNavigate} />
-          </li>
-        </ul>
+        <PanelCategoryTitle category={category} menuItem={menuItem} onNavigate={onNavigate} />
       </div>
     )
   }
@@ -120,6 +170,7 @@ function RightPanel({
   if (panel.type === 'cards') {
     return (
       <div className="fusion-nav-v2__panel-content" key={category.id}>
+        <PanelCategoryTitle category={category} menuItem={menuItem} onNavigate={onNavigate} />
         <div className="fusion-nav-v2__toolkit-grid">
           {panel.links.map((item) => (
             <a
@@ -145,30 +196,34 @@ function RightPanel({
           : 'fusion-nav-v2__columns'
 
     return (
-      <div className={`fusion-nav-v2__panel-content ${colClass}`} key={category.id}>
-        {panel.columns.map((col) => (
-          <div key={col.title} className="fusion-nav-v2__column">
-            <h4 className="fusion-nav-v2__column-title">{col.title}</h4>
-            <ul className="fusion-nav-v2__link-list">
-              {(isCappedCategory ? col.links.slice(0, 8) : col.links).map((item) => (
-                <li key={item.label}>
-                  <MegaLink label={item.label} href={item.href} onNavigate={onNavigate} />
-                </li>
-              ))}
-              {isCappedCategory && col.links.length > 8 ? (
-                <li key={`${col.title}-learn-more`}>
-                  <MegaMoreButton href={learnMoreHref} onNavigate={onNavigate} />
-                </li>
-              ) : null}
-            </ul>
-          </div>
-        ))}
+      <div className="fusion-nav-v2__panel-content fusion-nav-v2__panel-content--columns" key={category.id}>
+        <PanelCategoryTitle category={category} menuItem={menuItem} onNavigate={onNavigate} />
+        <div className={colClass}>
+          {panel.columns.map((col) => (
+            <div key={col.title} className="fusion-nav-v2__column">
+              <h4 className="fusion-nav-v2__column-title">{col.title}</h4>
+              <ul className="fusion-nav-v2__link-list">
+                {(isCappedCategory ? col.links.slice(0, 8) : col.links).map((item) => (
+                  <li key={item.label}>
+                    <MegaLink label={item.label} href={item.href} onNavigate={onNavigate} />
+                  </li>
+                ))}
+                {isCappedCategory && col.links.length > 8 ? (
+                  <li key={`${col.title}-learn-more`}>
+                    <MegaMoreButton href={learnMoreHref} onNavigate={onNavigate} />
+                  </li>
+                ) : null}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
 
   return (
     <div className="fusion-nav-v2__panel-content fusion-nav-v2__panel-content--list" key={category.id}>
+      <PanelCategoryTitle category={category} menuItem={menuItem} onNavigate={onNavigate} />
       <ul className="fusion-nav-v2__link-list">
         {panel.links.map((item) => (
           <li key={item.label}>
@@ -368,21 +423,23 @@ export function FusionSiteNavV2({
     [],
   )
 
-  const renderMobileLinks = (panel: NavCategoryPanel, category: NavCategory) => {
+  const renderMobileLinks = (
+    panel: NavCategoryPanel,
+    category: NavCategory,
+    menuItem: NavMenuItem,
+  ) => {
+    const categoryTitle = (
+      <PanelCategoryTitle category={category} menuItem={menuItem} onNavigate={handleLinkClick} />
+    )
+
     if (panel.type === 'empty') {
-      return (
-        <ul className="fusion-site-nav__mobile-link-list">
-          <li>
-            <a href="#" className="fusion-site-nav__mobile-link" onClick={(e) => handleLinkClick(e, '#')}>
-              {category.label}
-            </a>
-          </li>
-        </ul>
-      )
+      return categoryTitle
     }
     if (panel.type === 'cards') {
       return (
-        <ul className="fusion-site-nav__mobile-link-list">
+        <>
+          {categoryTitle}
+          <ul className="fusion-site-nav__mobile-link-list">
           {panel.links.map((item) => (
             <li key={item.label}>
               <a href={item.href} className="fusion-site-nav__mobile-link" onClick={(e) => handleLinkClick(e, item.href)}>
@@ -391,10 +448,14 @@ export function FusionSiteNavV2({
             </li>
           ))}
         </ul>
+        </>
       )
     }
     if (panel.type === 'columns') {
-      return panel.columns.map((col) => (
+      return (
+        <>
+          {categoryTitle}
+          {panel.columns.map((col) => (
         <div key={col.title} className="fusion-site-nav__mobile-col">
           <h4 className="fusion-site-nav__mobile-col-title">{col.title}</h4>
           <ul className="fusion-site-nav__mobile-link-list">
@@ -407,24 +468,32 @@ export function FusionSiteNavV2({
             ))}
           </ul>
         </div>
-      ))
+          ))}
+        </>
+      )
     }
     return (
-      <ul className="fusion-site-nav__mobile-link-list">
-        {panel.links.map((item) => (
-          <li key={item.label}>
-            <a href={item.href} className="fusion-site-nav__mobile-link" onClick={(e) => handleLinkClick(e, item.href)}>
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <>
+        {categoryTitle}
+        <ul className="fusion-site-nav__mobile-link-list">
+          {panel.links.map((item) => (
+            <li key={item.label}>
+              <a href={item.href} className="fusion-site-nav__mobile-link" onClick={(e) => handleLinkClick(e, item.href)}>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </>
     )
   }
 
   return (
-    <div className="fusion-nav-v2 fusion-site-nav relative" ref={navRef}>
-      <div className="mx-auto flex max-w-[var(--fusion-site-max-width)] items-center justify-between px-[var(--fusion-site-padding-x)] py-3 md:px-[var(--fusion-site-padding-x-md)]">
+    <div
+      className={`fusion-nav-v2 fusion-site-nav relative${activeMenu ? ` fusion-nav-v2--mega-open fusion-nav-v2--mega-open-${activeMenu}` : ''}`}
+      ref={navRef}
+    >
+      <div className="fusion-nav-v2__bar mx-auto flex max-w-[var(--fusion-site-max-width)] items-center justify-between px-[var(--fusion-site-padding-x)] py-3 md:px-[var(--fusion-site-padding-x-md)]">
         <a href="/" className="fusion-site-nav__logo inline-flex shrink-0 items-center">
           <img
             src="/images/fusion-orbit-logo.png"
@@ -442,7 +511,7 @@ export function FusionSiteNavV2({
               <button
                 key={item.id}
                 type="button"
-                className={`fusion-mega-trigger relative inline-flex items-center gap-1 border-0 bg-transparent px-3 py-2.5 text-[color:var(--fusion-blue)] transition-colors hover:text-[color:var(--color-primary-darkest)] lg:px-4 ${
+                className={`fusion-mega-trigger fusion-mega-trigger--${item.id} relative inline-flex items-center gap-1 border-0 bg-transparent px-3 py-2.5 text-[color:var(--fusion-blue)] transition-[color,background-color,box-shadow] duration-200 hover:text-[color:var(--color-primary-darkest)] lg:px-4 ${
                   isActive ? 'fusion-mega-trigger--active' : ''
                 }`}
                 style={{ fontSize: '0.9375rem', fontWeight: 600, lineHeight: 1 }}
@@ -453,7 +522,7 @@ export function FusionSiteNavV2({
                 <span>{item.label}</span>
                 <ChevronDown rotated={isActive} />
                 <span
-                  className={`pointer-events-none absolute bottom-0 left-3 right-3 h-[2.5px] rounded-full bg-[color:var(--fusion-blue)] transition-transform duration-200 origin-left ${
+                  className={`fusion-mega-trigger__underline pointer-events-none absolute bottom-0 left-3 right-3 h-[2.5px] rounded-full transition-transform duration-200 origin-left ${
                     isActive ? 'scale-x-100' : 'scale-x-0'
                   }`}
                 />
@@ -516,14 +585,14 @@ export function FusionSiteNavV2({
       {activeMenu && activeItem && activeCategory ? (
         <div
           id={`fusion-nav-v2-mega-${activeItem.id}`}
-          className="fusion-nav-v2__mega hidden md:block"
+          className={`fusion-nav-v2__mega fusion-nav-v2__mega--${activeItem.id} hidden md:block`}
           role="region"
           aria-label={`${activeItem.label} menu`}
         >
-          <div
-            key={activeItem.id}
-            className="fusion-nav-v2__mega-swap"
-          >
+          <div className="fusion-nav-v2__mega-bridge" aria-hidden="true" />
+          <div className="fusion-nav-v2__mega-atmosphere" aria-hidden="true" />
+          <div className="fusion-nav-v2__mega-veil" aria-hidden="true" />
+          <div key={activeItem.id} className="fusion-nav-v2__mega-swap">
             <div className="fusion-nav-v2__mega-container mx-auto max-w-[var(--fusion-site-max-width)] px-[var(--fusion-site-padding-x)] md:px-[var(--fusion-site-padding-x-md)]">
               <div className="fusion-nav-v2__mega-inner">
               <div className="fusion-nav-v2__left">
@@ -572,7 +641,11 @@ export function FusionSiteNavV2({
                 aria-labelledby={`fusion-nav-v2-tab-${activeItem.id}-${activeCategory.id}`}
                 className="fusion-nav-v2__right"
               >
-                <RightPanel category={activeCategory} onNavigate={handleLinkClick} />
+                <RightPanel
+                  category={activeCategory}
+                  menuItem={activeItem}
+                  onNavigate={handleLinkClick}
+                />
               </div>
               </div>
             </div>
@@ -627,7 +700,7 @@ export function FusionSiteNavV2({
           {menuItems.map((item) => (
             <details
               key={item.id}
-              className="fusion-site-nav__mobile-details"
+              className={`fusion-site-nav__mobile-details fusion-nav-v2__mobile-details--${item.id}`}
               open={mobileNavId === item.id}
               onToggle={(e) => {
                 const open = (e.target as HTMLDetailsElement).open
@@ -638,7 +711,7 @@ export function FusionSiteNavV2({
               }}
             >
               <summary className="fusion-site-nav__mobile-summary">{item.label}</summary>
-              <div className="fusion-site-nav__mobile-panel fusion-nav-v2__mobile-panel">
+              <div className={`fusion-site-nav__mobile-panel fusion-nav-v2__mobile-panel fusion-nav-v2__mobile-panel--${item.id}`}>
                 <div className="fusion-nav-v2__mobile-categories" role="list">
                   {item.categories.map((cat) => {
                     const selected = mobileNavId === item.id && mobileCategoryId === cat.id
@@ -662,6 +735,7 @@ export function FusionSiteNavV2({
                     {renderMobileLinks(
                       item.categories.find((c) => c.id === mobileCategoryId)?.panel ?? { type: 'empty' },
                       item.categories.find((c) => c.id === mobileCategoryId) ?? item.categories[0],
+                      item,
                     )}
                   </div>
                 ) : null}

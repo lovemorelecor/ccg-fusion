@@ -28,6 +28,52 @@ function FeatureBullet() {
   )
 }
 
+function FusionToolkitBreadcrumbs() {
+  return (
+    <div className="kc-breadcrumb-bar ft-breadcrumb-bar">
+      <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
+        <ol className="kc-breadcrumb-list">
+          <li>
+            <Link to="/" className="kc-breadcrumb-link">
+              Home
+            </Link>
+          </li>
+          <li aria-hidden="true" className="kc-breadcrumb-sep">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M6 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </li>
+          <li>
+            <Link to="/explore" className="kc-breadcrumb-link">
+              Explore
+            </Link>
+          </li>
+          <li aria-hidden="true" className="kc-breadcrumb-sep">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+              <path
+                d="M6 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </li>
+          <li>
+            <span className="kc-breadcrumb-current">Fusion Toolkit</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  )
+}
+
 function ProductVisualization({ productId }: { productId: 'basecamp' | 'helix' | 'lens' | 'match' }) {
   return (
     <div className="ft-product-viz">
@@ -51,9 +97,11 @@ export default function FusionToolkitLandingPage() {
     <>
       <SkipNav href="#main-content">Skip to main content</SkipNav>
       <SiteHeader />
-      <FusionToolkitStickyNav />
 
       <main id="main-content" tabIndex={-1} className="ft-page">
+        <FusionToolkitBreadcrumbs />
+        <FusionToolkitStickyNav />
+
         <section id="overview" className="ft-hero" aria-labelledby="ft-hero-heading" tabIndex={-1}>
           <div className="ft-hero__glow ft-hero__glow--one" aria-hidden />
           <div className="ft-hero__glow ft-hero__glow--two" aria-hidden />
@@ -159,13 +207,6 @@ export default function FusionToolkitLandingPage() {
                 Return Home
               </FusionButton>
             </div>
-            <nav className="ft-footer-band__crumb" aria-label="Breadcrumb">
-              <Link to="/">Home</Link>
-              <span aria-hidden> / </span>
-              <Link to="/explore">Explore</Link>
-              <span aria-hidden> / </span>
-              <span>Fusion Toolkit</span>
-            </nav>
           </div>
         </section>
       </main>

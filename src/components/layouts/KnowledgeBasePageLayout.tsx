@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { FusionButton } from '../FusionButton'
 import { DocOnThisPageNav, type DocTocItem } from './DocOnThisPageNav'
+import { InteriorPageHeroBand } from './InteriorPageHeroBand'
 
 export type KnowledgeBaseNavLink = {
   label: string
@@ -143,18 +144,18 @@ export function KnowledgeBasePageLayout({
     .join(' ')
 
   return (
-    <>
-      <div className="ddoc-breadcrumb-bar">{breadcrumbs}</div>
+    <div className="tpl-2col-shell tpl-3col-page">
+      <InteriorPageHeroBand
+        breadcrumbs={breadcrumbs}
+        pageTitle={pageTitle}
+        pageSubtext={pageSubtext}
+        titleId="tpl-3col-hero-title"
+      />
 
-      <div className="ddoc-shell tpl-3col-shell">
-        <header className="tpl-2col-page-header tpl-3col-page-header">
-          <div className="tpl-2col-page-header__inner">
-            <h1 className="tpl-2col-page-header__title">{pageTitle}</h1>
-            <p className="tpl-2col-page-header__subtext">{pageSubtext}</p>
-          </div>
-        </header>
-
-        <button
+      <div className="tpl-2col-body">
+        <div className="tpl-2col-body__inner tpl-3col-body__inner">
+          <div className="ddoc-shell tpl-3col-shell">
+            <button
           type="button"
           className="ddoc-mobile-nav-toggle"
           aria-expanded={mobileNavOpen}
@@ -382,7 +383,9 @@ export function KnowledgeBasePageLayout({
             </div>
           </section>
         ) : null}
+          </div>
+        </div>
       </div>
-    </>
+    </div>
   )
 }

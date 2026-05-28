@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { InteriorPageHeroBand } from './InteriorPageHeroBand'
 
 export type TwoColumnNavItem = {
   id: string
@@ -12,12 +13,10 @@ export type TwoColumnNavItem = {
 
 export type TwoColumnPageLayoutProps = {
   breadcrumbs: ReactNode
-  /** Full-width page header above the two columns */
   pageTitle: string
   pageSubtext: string
   navLabel?: string
   navItems: TwoColumnNavItem[]
-  /** Title shown at the top of the right content panel */
   contentTitle: string
   children: ReactNode
 }
@@ -31,7 +30,11 @@ function ChevronRight({ className }: { className?: string }) {
 }
 
 function NavRow({ item, onNavigate }: { item: TwoColumnNavItem; onNavigate?: () => void }) {
-  const row = <span className="ddoc-side-nav__label">{item.label}</span>
+  const className = item.active
+    ? 'ddoc-side-nav__row ddoc-side-nav__row--active tpl-2col-nav__row'
+    : 'ddoc-side-nav__row tpl-2col-nav__row'
+
+  const label = <span className="ddoc-side-nav__label">{item.label}</span>
 
   const handleActivate = () => {
     item.onClick?.()
@@ -42,11 +45,11 @@ function NavRow({ item, onNavigate }: { item: TwoColumnNavItem; onNavigate?: () 
     return (
       <Link
         to={item.to}
-        className={item.active ? 'ddoc-side-nav__row ddoc-side-nav__row--active' : 'ddoc-side-nav__row'}
+        className={className}
         aria-current={item.active ? 'page' : undefined}
         onClick={onNavigate}
       >
-        {row}
+        {label}
       </Link>
     )
   }
@@ -55,22 +58,18 @@ function NavRow({ item, onNavigate }: { item: TwoColumnNavItem; onNavigate?: () 
     return (
       <a
         href={item.href}
-        className={item.active ? 'ddoc-side-nav__row ddoc-side-nav__row--active' : 'ddoc-side-nav__row'}
+        className={className}
         aria-current={item.active ? 'page' : undefined}
         onClick={onNavigate}
       >
-        {row}
+        {label}
       </a>
     )
   }
 
   return (
-    <button
-      type="button"
-      className={item.active ? 'ddoc-side-nav__row ddoc-side-nav__row--active' : 'ddoc-side-nav__row'}
-      onClick={handleActivate}
-    >
-      {row}
+    <button type="button" className={className} onClick={handleActivate}>
+      {label}
     </button>
   )
 }
@@ -96,46 +95,50 @@ export function TwoColumnPageLayout({
   }, [])
 
   return (
-    <>
-      <div className="ddoc-breadcrumb-bar">{breadcrumbs}</div>
+    <div className="tpl-2col-shell">
+      <InteriorPageHeroBand
+        breadcrumbs={breadcrumbs}
+        pageTitle={pageTitle}
+        pageSubtext={pageSubtext}
+        titleId="tpl-2col-hero-title"
+      />
 
-      <div className="tpl-2col-shell">
-        <header className="tpl-2col-page-header">
-          <div className="tpl-2col-page-header__inner">
-            <h1 className="tpl-2col-page-header__title">{pageTitle}</h1>
-            <p className="tpl-2col-page-header__subtext">{pageSubtext}</p>
-          </div>
-        </header>
+        <div className="tpl-2col-body">
+          <div className="tpl-2col-body__inner">
+            <button
+              type="button"
+              className="ddoc-mobile-nav-toggle tpl-2col-mobile-toggle"
+              aria-expanded={mobileNavOpen}
+              onClick={() => setMobileNavOpen((open) => !open)}
+            >
+              {navLabel}
+              <ChevronRight className={mobileNavOpen ? 'ddoc-mobile-nav-toggle__chev--open' : undefined} />
+            </button>
 
-        <button
-          type="button"
-          className="ddoc-mobile-nav-toggle"
-          aria-expanded={mobileNavOpen}
-          onClick={() => setMobileNavOpen((open) => !open)}
-        >
-          {navLabel}
-          <ChevronRight className={mobileNavOpen ? 'ddoc-mobile-nav-toggle__chev--open' : undefined} />
-        </button>
+            <div className={`tpl-2col-layout${mobileNavOpen ? ' tpl-2col-layout--nav-open' : ''}`}>
+              <aside className="ddoc-sidebar tpl-2col-sidebar" aria-label={navLabel}>
+                <div className="ddoc-sidebar__sticky-stack tpl-2col-sidebar__stack">
+                  <div className="ddoc-sidebar__card tpl-2col-sidebar__nav-card">
+                    <nav className="ddoc-side-nav tpl-2col-nav">
+                      {navItems.map((item) => (
+                        <NavRow key={item.id} item={item} onNavigate={() => setMobileNavOpen(false)} />
+                      ))}
+                    </nav>
+                  </div>
+                </div>
+              </aside>
 
-        <div className={`tpl-2col-layout${mobileNavOpen ? ' tpl-2col-layout--nav-open' : ''}`}>
-          <aside className="ddoc-sidebar tpl-2col-sidebar" aria-label={navLabel}>
-            <div className="ddoc-sidebar__sticky-stack">
-              <div className="ddoc-sidebar__card">
-                <nav className="ddoc-side-nav">
-                  {navItems.map((item) => (
-                    <NavRow key={item.id} item={item} onNavigate={() => setMobileNavOpen(false)} />
-                  ))}
-                </nav>
-              </div>
+              <article className="tpl-2col-content">
+                <header className="tpl-2col-content__header">
+                  <h2 className="tpl-2col-content__title">{contentTitle}</h2>
+                </header>
+                <div className="tpl-2col-content__body">
+                  <div className="tpl-2col-content__prose">{children}</div>
+                </div>
+              </article>
             </div>
-          </aside>
-
-          <div className="tpl-2col-content ddoc-article">
-            <h2 className="tpl-2col-content__title">{contentTitle}</h2>
-            <div className="tpl-2col-content__body">{children}</div>
           </div>
         </div>
-      </div>
-    </>
+    </div>
   )
 }

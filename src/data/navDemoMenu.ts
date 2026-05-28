@@ -11,6 +11,7 @@ export type NavCategoryPanel =
 export type NavCategory = {
   id: string
   label: string
+  href?: string
   panel: NavCategoryPanel
 }
 

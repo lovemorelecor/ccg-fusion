@@ -157,60 +157,62 @@ export default function ProgramOverviewPage() {
       <SiteHeader />
 
       <main id="main-content" tabIndex={-1} ref={revealRef} className="program-overview">
-        <div className="kc-breadcrumb-bar kc-breadcrumb-bar--initiatives">
-          <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
-            <ol className="kc-breadcrumb-list">
-              <li>
-                <Link to="/" className="kc-breadcrumb-link">
-                  Home
-                </Link>
-              </li>
-              <li aria-hidden="true" className="kc-breadcrumb-sep">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </li>
-              <li>
-                <a href="#about" className="kc-breadcrumb-link">
-                  About
-                </a>
-              </li>
-              <li aria-hidden="true" className="kc-breadcrumb-sep">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </li>
-              <li>
-                <span className="kc-breadcrumb-current">Program Overview</span>
-              </li>
-            </ol>
-          </nav>
-        </div>
+        <header className="tpl-2col-hero-band">
+          <div className="tpl-2col-breadcrumb-bar">
+            <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
+              <ol className="kc-breadcrumb-list">
+                <li>
+                  <Link to="/" className="kc-breadcrumb-link">
+                    Home
+                  </Link>
+                </li>
+                <li aria-hidden="true" className="kc-breadcrumb-sep">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </li>
+                <li>
+                  <a href="#about" className="kc-breadcrumb-link">
+                    About
+                  </a>
+                </li>
+                <li aria-hidden="true" className="kc-breadcrumb-sep">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </li>
+                <li>
+                  <span className="kc-breadcrumb-current">Program Overview</span>
+                </li>
+              </ol>
+            </nav>
+          </div>
 
-        <section className="po-hero" aria-labelledby="po-hero-heading">
-          <div className="po-hero__glow" aria-hidden />
-          <div className="init-hero__inner po-hero__inner">
-            <div className="init-hero__text po-hero__text">
-              <h1 id="po-hero-heading" className="init-hero__heading po-hero__heading">
-                Why Hybrid Cloud Hosting
-              </h1>
-              <p className="init-hero__description po-hero__description">
-                CMS's Hybrid Cloud service provides all the benefits of cloud hosting – secure, scalable,
-                and cost effective – along with the added benefits of regulatory and organizational control of
-                a traditional data center.
-              </p>
-              <div className="init-hero__actions">
-                <FusionButton href="#get-started" accent onDark>
-                  Get Started
-                  <ArrowIcon />
-                </FusionButton>
-                <FusionButton href="#critical-work" variation="ghost" onDark>
-                  Learn More
-                </FusionButton>
+          <section className="po-hero" aria-labelledby="po-hero-heading">
+            <div className="po-hero__glow" aria-hidden />
+            <div className="init-hero__inner po-hero__inner">
+              <div className="init-hero__text po-hero__text">
+                <h1 id="po-hero-heading" className="init-hero__heading po-hero__heading">
+                  Why Hybrid Cloud Hosting
+                </h1>
+                <p className="init-hero__description po-hero__description">
+                  CMS's Hybrid Cloud service provides all the benefits of cloud hosting – secure, scalable,
+                  and cost effective – along with the added benefits of regulatory and organizational control of
+                  a traditional data center.
+                </p>
+                <div className="init-hero__actions">
+                  <FusionButton href="#get-started" accent onDark>
+                    Get Started
+                    <ArrowIcon />
+                  </FusionButton>
+                  <FusionButton href="#critical-work" variation="ghost" onDark>
+                    Learn More
+                  </FusionButton>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </header>
 
         <div className="kc-content">
           <section className="kc-section kc-reveal" id="critical-work">

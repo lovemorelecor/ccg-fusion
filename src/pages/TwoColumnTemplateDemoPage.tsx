@@ -56,30 +56,30 @@ const sectionCopy: Record<
 
 function Breadcrumbs() {
   return (
-    <nav aria-label="Breadcrumb" className="ddoc-breadcrumb-inner">
-      <ol className="ddoc-breadcrumb-list">
+    <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
+      <ol className="kc-breadcrumb-list">
         <li>
-          <Link to="/" className="ddoc-breadcrumb-link">
+          <Link to="/" className="kc-breadcrumb-link">
             Home
           </Link>
         </li>
-        <li aria-hidden="true" className="ddoc-breadcrumb-sep">
+        <li aria-hidden="true" className="kc-breadcrumb-sep">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </li>
         <li>
-          <Link to="/resources/page-layouts" className="ddoc-breadcrumb-link">
+          <Link to="/resources/page-layouts" className="kc-breadcrumb-link">
             Page layouts
           </Link>
         </li>
-        <li aria-hidden="true" className="ddoc-breadcrumb-sep">
+        <li aria-hidden="true" className="kc-breadcrumb-sep">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </li>
         <li>
-          <span className="ddoc-breadcrumb-current">2-Column Template</span>
+          <span className="kc-breadcrumb-current">2-Column Template</span>
         </li>
       </ol>
     </nav>

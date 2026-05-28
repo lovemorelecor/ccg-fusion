@@ -8,30 +8,30 @@ import { SiteHeader } from '../components/SiteHeader'
 
 function PlatformBreadcrumbs({ platformTitle }: { platformTitle: string }) {
   return (
-    <nav aria-label="Breadcrumb" className="ddoc-breadcrumb-inner">
-      <ol className="ddoc-breadcrumb-list">
+    <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
+      <ol className="kc-breadcrumb-list">
         <li>
-          <Link to="/" className="ddoc-breadcrumb-link">
+          <Link to="/" className="kc-breadcrumb-link">
             Home
           </Link>
         </li>
-        <li aria-hidden="true" className="ddoc-breadcrumb-sep">
+        <li aria-hidden="true" className="kc-breadcrumb-sep">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </li>
         <li>
-          <Link to="/explore" className="ddoc-breadcrumb-link">
+          <Link to="/explore" className="kc-breadcrumb-link">
             Explore
           </Link>
         </li>
-        <li aria-hidden="true" className="ddoc-breadcrumb-sep">
+        <li aria-hidden="true" className="kc-breadcrumb-sep">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </li>
         <li>
-          <span className="ddoc-breadcrumb-current">{platformTitle}</span>
+          <span className="kc-breadcrumb-current">{platformTitle}</span>
         </li>
       </ol>
     </nav>

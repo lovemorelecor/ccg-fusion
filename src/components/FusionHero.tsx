@@ -228,7 +228,7 @@ export function FusionHero() {
                 </p>
               </div>
 
-              <div className="fusion-hero__actions mt-4 flex flex-col gap-3 sm:mt-5 sm:flex-row sm:flex-nowrap sm:items-center sm:gap-3">
+              <div className="fusion-hero__actions mt-4 flex flex-col gap-3 sm:mt-5 sm:flex-row sm:flex-nowrap sm:items-center sm:gap-4">
                 <FusionButton href="#pathways" accent onDark className="fusion-hero__cta-primary">
                   Start your journey
                 </FusionButton>
@@ -246,8 +246,8 @@ export function FusionHero() {
         </div>
       </div>
 
-      {/* Carousel: full-bleed hero, bottom center (not tied to left copy column) */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[15] flex justify-center px-4 pb-20 pt-2 sm:pb-24 md:pb-[5.5rem]">
+      {/* Carousel: full-bleed hero, bottom center */}
+      <div className="fusion-hero__carousel-dock pointer-events-none absolute inset-x-0 bottom-0 z-[15] flex justify-center px-4 pb-20 pt-6 sm:pb-24 sm:pt-8 md:pb-[5.5rem]">
         <div
           className="fusion-hero__carousel-well pointer-events-auto flex items-center justify-center gap-3 rounded-full border border-white/25 px-4 py-2 shadow-lg backdrop-blur-md sm:gap-4 sm:px-5 sm:py-2.5"
           role="group"
@@ -263,10 +263,7 @@ export function FusionHero() {
           >
             <ChevronLeft className="shrink-0" />
           </button>
-          <div
-            className="flex items-center justify-center gap-2.5 sm:gap-3"
-            aria-label="Slides"
-          >
+          <div className="flex items-center justify-center gap-2.5 sm:gap-3" aria-label="Slides">
             {HERO_SLIDES.map((_, i) => (
               <button
                 key={i}

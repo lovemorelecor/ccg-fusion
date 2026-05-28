@@ -1,4 +1,4 @@
-import { fusionToolkitNavLinks } from './fusionToolkitContent'
+import { fusionToolkitNavLinks, fusionToolkitPath } from './fusionToolkitContent'
 import { platformNavLinks } from './platformPages'
 
 export type NavLink = { label: string; href: string }
@@ -14,6 +14,8 @@ export type NavCategoryPanel =
 export type NavCategory = {
   id: string
   label: string
+  /** Landing page for the category title in the mega menu right panel */
+  href?: string
   panel: NavCategoryPanel
 }
 
@@ -37,12 +39,18 @@ function sortLinks(links: NavLink[]): NavLink[] {
   return [...links].sort((a, b) => alpha.compare(a.label, b.label))
 }
 
-function sortPanel(panel: NavCategoryPanel): NavCategoryPanel {
+/** Panels with fixed link order (do not alphabetize). */
+const PRESERVE_LINK_ORDER_CATEGORY_IDS = new Set(['fusion-toolkit'])
+
+function sortPanel(panel: NavCategoryPanel, categoryId?: string): NavCategoryPanel {
   if (panel.type === 'empty') {
     return panel
   }
 
   if (panel.type === 'list' || panel.type === 'cards') {
+    if (categoryId && PRESERVE_LINK_ORDER_CATEGORY_IDS.has(categoryId)) {
+      return panel
+    }
     return { ...panel, links: sortLinks(panel.links) }
   }
 
@@ -62,7 +70,7 @@ function sortMenuItems(items: NavMenuItem[]): NavMenuItem[] {
         if (item.id === 'about' && category.id === 'about-hybrid-cloud') {
           return category
         }
-        return { ...category, panel: sortPanel(category.panel) }
+        return { ...category, panel: sortPanel(category.panel, category.id) }
       })
       .sort((a, b) => {
         if (item.id === 'learn') {
@@ -110,6 +118,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'about-hybrid-cloud',
         label: 'About Hybrid Cloud',
+        href: '/about/program-overview',
         panel: {
           type: 'list',
           links: [
@@ -130,6 +139,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'platforms',
         label: 'Platforms',
+        href: '/explore#platforms',
         panel: {
           type: 'list',
           links: platformNavLinks,
@@ -138,6 +148,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'fusion-toolkit',
         label: 'Fusion Toolkit',
+        href: fusionToolkitPath,
         panel: {
           type: 'list',
           links: fusionToolkitNavLinks,
@@ -146,6 +157,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'shared-services',
         label: 'Shared Services',
+        href: '/explore',
         panel: {
           type: 'list',
           links: list(
@@ -172,6 +184,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'knowledge-center',
         label: 'Knowledge Center',
+        href: '/learn/knowledge-center',
         panel: {
           type: 'columns',
           columns: [
@@ -240,6 +253,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'training-enablement',
         label: 'Training & Enablement',
+        href: '/learn/knowledge-center',
         panel: {
           type: 'columns',
           columns: [
@@ -267,6 +281,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'customer-roadmap',
         label: 'Customer Roadmap',
+        href: '/learn/initiatives',
         panel: {
           type: 'columns',
           columns: [
@@ -328,6 +343,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'new-onboarding',
         label: 'New Onboarding',
+        href: '/#pathways',
         panel: {
           type: 'list',
           links: list(
@@ -339,6 +355,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'migrate',
         label: 'Migrate',
+        href: '/#pathways',
         panel: {
           type: 'list',
           links: list(

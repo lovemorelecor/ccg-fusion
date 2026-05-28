@@ -1,16 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { FusionButton } from '../FusionButton'
-import { fusionToolkitProducts } from '../../data/fusionToolkitContent'
+import { fusionToolkitNavLinks } from '../../data/fusionToolkitContent'
 
-export const fusionToolkitSectionIds = [
-  'overview',
-  ...fusionToolkitProducts.map((p) => p.id),
-]
+function sectionIdFromNavHref(href: string): string {
+  const hash = href.split('#')[1]
+  return hash ?? 'overview'
+}
 
-const navItems = [
-  { id: 'overview', label: 'Overview' },
-  ...fusionToolkitProducts.map((p) => ({ id: p.id, label: p.name })),
-]
+export const fusionToolkitSectionIds = fusionToolkitNavLinks.map((link) =>
+  sectionIdFromNavHref(link.href),
+)
+
+const navItems = fusionToolkitNavLinks.map((link) => ({
+  id: sectionIdFromNavHref(link.href),
+  label: link.label,
+}))
 
 function getScrollSpyOffset(): number {
   const siteHeader = document.querySelector<HTMLElement>('.fusion-site-nav')?.closest('.sticky')
