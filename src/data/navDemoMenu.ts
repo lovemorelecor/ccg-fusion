@@ -296,6 +296,7 @@ export const navDemoMenuItems: NavMenuItem[] = [
       {
         id: 'training-enablement',
         label: 'Training & Enablement',
+        href: '/learn/training-enablement',
         panel: {
           type: 'columns',
           columns: [

@@ -8,47 +8,80 @@ type SiteSearchPanelProps = {
 
 type Phase = 'closed' | 'entering' | 'open' | 'exiting'
 
-function derivePhase(open: boolean, prev: Phase): Phase {
-  if (open && (prev === 'closed' || prev === 'exiting')) return 'entering'
-  if (!open && (prev === 'open' || prev === 'entering')) return 'exiting'
-  return prev
+const EXIT_MS = 280
+const ENTER_MS = 380
+
+function prefersReducedMotion() {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
 export function SiteSearchPanel({ open, onClose }: SiteSearchPanelProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [phase, setPhase] = useState<Phase>(open ? 'open' : 'closed')
 
-  const derived = derivePhase(open, phase)
-  if (derived !== phase) {
-    setPhase(derived)
-  }
+  useEffect(() => {
+    if (open) {
+      setPhase((current) => (current === 'closed' || current === 'exiting' ? 'entering' : current))
+      return
+    }
+
+    setPhase((current) =>
+      current === 'open' || current === 'entering' ? 'exiting' : current,
+    )
+  }, [open])
 
   useEffect(() => {
     if (phase === 'entering') {
+      if (prefersReducedMotion()) {
+        setPhase('open')
+        return
+      }
+      const id = window.setTimeout(() => {
+        setPhase((current) => (current === 'entering' ? 'open' : current))
+      }, ENTER_MS)
+      return () => window.clearTimeout(id)
+    }
+
+    if (phase === 'exiting') {
+      if (prefersReducedMotion()) {
+        setPhase('closed')
+        return
+      }
+      const id = window.setTimeout(() => {
+        setPhase((current) => (current === 'exiting' ? 'closed' : current))
+      }, EXIT_MS)
+      return () => window.clearTimeout(id)
+    }
+  }, [phase])
+
+  useEffect(() => {
+    if (phase === 'entering' || phase === 'open') {
       inputRef.current?.focus()
     }
   }, [phase])
 
-  const onAnimEnd = useCallback(() => {
-    setPhase((p) => {
-      if (p === 'entering') return 'open'
-      if (p === 'exiting') return 'closed'
-      return p
-    })
-  }, [])
-
   useEffect(() => {
-    if (!open) return
+    if (!open && phase === 'closed') return
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, onClose])
+  }, [open, phase, onClose])
+
+  const onAnimEnd = useCallback((e: React.AnimationEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return
+    setPhase((current) => {
+      if (current === 'entering') return 'open'
+      if (current === 'exiting') return 'closed'
+      return current
+    })
+  }, [])
 
   if (phase === 'closed') return null
 
-  const animClass = phase === 'entering' ? 'fusion-search-enter' : phase === 'exiting' ? 'fusion-search-exit' : ''
+  const animClass =
+    phase === 'entering' ? 'fusion-search-enter' : phase === 'exiting' ? 'fusion-search-exit' : ''
 
   return (
     <div

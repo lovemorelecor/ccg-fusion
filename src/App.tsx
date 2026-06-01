@@ -16,6 +16,7 @@ import PageLayoutTemplatePage from './pages/PageLayoutTemplatePage'
 import ThreeColumnTemplateDemoPage from './pages/ThreeColumnTemplateDemoPage'
 import TwoColumnTemplateDemoPage from './pages/TwoColumnTemplateDemoPage'
 import ProgramOverviewPage from './pages/ProgramOverviewPage'
+import TrainingEnablementPage from './pages/TrainingEnablementPage'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/explore/platforms/:platformSlug" element={<PlatformInteriorPage />} />
         <Route path="/explore/fusion-toolkit" element={<FusionToolkitLandingPage />} />
         <Route path="/learn/initiatives" element={<InitiativesPage />} />
+        <Route path="/learn/training-enablement" element={<TrainingEnablementPage />} />
         <Route path="/nav-demo" element={<NavDemoPage />} />
         <Route path="/nav-new-ccg" element={<NavNewCcgPage />} />
         <Route path="/nav-option-2" element={<NavOption2Page />} />

@@ -4,13 +4,6 @@ import { navNewCcgMenuItems } from '../data/navNewCcgMenu'
 import { FusionSiteNavV2 } from './nav-demo/FusionSiteNavV2'
 import { SiteSearchPanel } from './SiteSearchPanel'
 
-const newCcgLegacy = {
-  label: 'New CCG',
-  href: '#new-ccg',
-  modalTitle: 'Redirecting to New CCG',
-  modalMessage: 'You are being redirected to the new CCG website.',
-}
-
 export function SiteHeader() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
@@ -47,7 +40,6 @@ export function SiteHeader() {
           onSearchToggle={onSearchToggle}
           onSearchClose={closeSearch}
           menuItems={navNewCcgMenuItems}
-          legacyCcg={newCcgLegacy}
         />
         <SiteSearchPanel open={searchOpen} onClose={closeSearch} />
       </div>

@@ -253,7 +253,7 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
       {
         id: 'training-enablement',
         label: 'Training & Enablement',
-        href: '/learn/knowledge-center',
+        href: '/learn/training-enablement',
         panel: {
           type: 'columns',
           columns: [

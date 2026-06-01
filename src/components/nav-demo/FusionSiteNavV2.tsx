@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import {
@@ -7,14 +7,6 @@ import {
   type NavCategoryPanel,
   type NavMenuItem,
 } from '../../data/navDemoMenu'
-
-const defaultLegacyCcg = {
-  label: 'Legacy CCG',
-  href: '#legacy-ccg',
-  modalTitle: 'Redirecting to CCG Legacy',
-  modalMessage: 'You are being redirected to the CCG Legacy website.',
-}
-import { FusionButton } from '../FusionButton'
 import { SearchIcon } from '../SearchIcon'
 
 function ChevronDown({ className, rotated }: { className?: string; rotated?: boolean }) {
@@ -157,7 +149,11 @@ function RightPanel({
   const { panel } = category
   const isCappedCategory = category.id === 'knowledge-center' || category.id === 'customer-roadmap'
   const learnMoreHref =
-    category.id === 'customer-roadmap' ? '/learn/initiatives' : '/learn/knowledge-center'
+    category.id === 'customer-roadmap'
+      ? '/learn/initiatives'
+      : category.id === 'training-enablement'
+        ? '/learn/training-enablement'
+        : '/learn/knowledge-center'
 
   if (panel.type === 'empty') {
     return (
@@ -240,12 +236,6 @@ export type FusionSiteNavV2Props = {
   onSearchToggle: () => void
   onSearchClose: () => void
   menuItems?: NavMenuItem[]
-  legacyCcg?: {
-    label: string
-    href: string
-    modalTitle: string
-    modalMessage: string
-  }
 }
 
 export function FusionSiteNavV2({
@@ -253,11 +243,8 @@ export function FusionSiteNavV2({
   onSearchToggle,
   onSearchClose,
   menuItems = navDemoMenuItems,
-  legacyCcg = defaultLegacyCcg,
 }: FusionSiteNavV2Props) {
   const navRef = useRef<HTMLDivElement>(null)
-  const legacyModalRef = useRef<HTMLDivElement>(null)
-  const legacyTriggerRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
 
   const [activeMenu, setActiveMenu] = useState<string | null>(null)
@@ -265,9 +252,6 @@ export function FusionSiteNavV2({
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
   const [mobileNavId, setMobileNavId] = useState<string | null>(null)
   const [mobileCategoryId, setMobileCategoryId] = useState<string | null>(null)
-  const [legacyCcgModalOpen, setLegacyCcgModalOpen] = useState(false)
-  const legacyModalTitleId = useId()
-  const legacyModalDescId = useId()
 
   const activeItem = menuItems.find((item) => item.id === activeMenu)
   const activeCategory =
@@ -310,21 +294,6 @@ export function FusionSiteNavV2({
     [navigate, closeMenu],
   )
 
-  const openLegacyCcgModal = useCallback(() => {
-    setMobileDrawerOpen(false)
-    closeMenu()
-    setLegacyCcgModalOpen(true)
-  }, [closeMenu])
-
-  const closeLegacyCcgModal = useCallback(() => {
-    setLegacyCcgModalOpen(false)
-    legacyTriggerRef.current?.focus()
-  }, [])
-
-  const continueToLegacyCcg = useCallback(() => {
-    window.location.assign(legacyCcg.href)
-  }, [legacyCcg.href])
-
   const toggleMobileDrawer = useCallback(() => {
     setMobileDrawerOpen((open) => {
       const next = !open
@@ -355,19 +324,16 @@ export function FusionSiteNavV2({
   }, [activeMenu, mobileDrawerOpen, closeMenu])
 
   useEffect(() => {
-    if (!activeMenu && !mobileDrawerOpen && !legacyCcgModalOpen) return
+    if (!activeMenu && !mobileDrawerOpen) return
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        if (legacyCcgModalOpen) closeLegacyCcgModal()
-        else {
-          closeMenu()
-          setMobileDrawerOpen(false)
-        }
+        closeMenu()
+        setMobileDrawerOpen(false)
       }
     }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [activeMenu, mobileDrawerOpen, legacyCcgModalOpen, closeMenu, closeLegacyCcgModal])
+  }, [activeMenu, mobileDrawerOpen, closeMenu])
 
   useEffect(() => {
     if (!activeMenu && !mobileDrawerOpen) return
@@ -377,16 +343,6 @@ export function FusionSiteNavV2({
       document.body.style.overflow = prev
     }
   }, [activeMenu, mobileDrawerOpen])
-
-  useEffect(() => {
-    if (!legacyCcgModalOpen) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    legacyModalRef.current?.focus()
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [legacyCcgModalOpen])
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 768px)')
@@ -555,18 +511,13 @@ export function FusionSiteNavV2({
             <SearchIcon className="size-5 shrink-0" />
           </button>
 
-          <button
-            ref={legacyTriggerRef}
-            type="button"
-            className="fusion-site-nav__legacy-link"
-            onClick={openLegacyCcgModal}
+          <a
+            href="#get-help"
+            className="fusion-site-nav__legacy-link fusion-site-nav__get-help"
+            onClick={(e) => handleLinkClick(e, '#get-help')}
           >
-            {legacyCcg.label}
-          </button>
-
-          <FusionButton href="#get-help" accent size="small" className="fusion-site-nav__get-help">
             Get Help
-          </FusionButton>
+          </a>
         </div>
       </div>
 
@@ -652,44 +603,6 @@ export function FusionSiteNavV2({
           </div>
         </div>
       ) : null}
-
-      {legacyCcgModalOpen
-        ? createPortal(
-            <div className="fusion-legacy-modal" role="presentation">
-              <button
-                type="button"
-                className="fusion-legacy-modal__backdrop"
-                aria-label="Close dialog"
-                onClick={closeLegacyCcgModal}
-              />
-              <div
-                ref={legacyModalRef}
-                className="fusion-legacy-modal__panel"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby={legacyModalTitleId}
-                aria-describedby={legacyModalDescId}
-                tabIndex={-1}
-              >
-                <h2 id={legacyModalTitleId} className="fusion-legacy-modal__title">
-                  {legacyCcg.modalTitle}
-                </h2>
-                <p id={legacyModalDescId} className="fusion-legacy-modal__message">
-                  {legacyCcg.modalMessage}
-                </p>
-                <div className="fusion-legacy-modal__actions">
-                  <FusionButton type="button" variation="ghost" onClick={closeLegacyCcgModal}>
-                    Cancel
-                  </FusionButton>
-                  <FusionButton type="button" variation="solid" onClick={continueToLegacyCcg}>
-                    Continue
-                  </FusionButton>
-                </div>
-              </div>
-            </div>,
-            document.body,
-          )
-        : null}
 
       <div
         id="fusion-nav-v2-mobile-drawer"

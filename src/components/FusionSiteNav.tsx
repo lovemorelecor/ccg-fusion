@@ -1,5 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FusionButton } from './FusionButton'
 import { SearchIcon } from './SearchIcon'
@@ -103,14 +102,14 @@ const megaMenuItems: MegaMenuItem[] = [
       description:
         'Comprehensive learning paths and certification programs',
       ctaLabel: 'Start Learning',
-      ctaHref: '/#fusion-academy',
+      ctaHref: '/learn/training-enablement',
       ctaVariant: 'gold',
     },
     columns: [
       {
         links: [
           { label: 'Knowledge Center', href: '/learn/knowledge-center' },
-          { label: 'Training & Enablement', href: '/#fusion-academy' },
+          { label: 'Training & Enablement', href: '/learn/training-enablement' },
           { label: 'Customer Roadmap', href: '/learn/initiatives' },
         ],
       },
@@ -137,8 +136,6 @@ const megaMenuItems: MegaMenuItem[] = [
     ],
   },
 ]
-
-const legacyCcgLink: MenuLink = { label: 'Legacy CCG', href: '/learn/knowledge-center' }
 
 function megaMenuCtaProps(variant: FeaturedCard['ctaVariant']) {
   if (variant === 'gold') return { accent: true as const }
@@ -201,29 +198,8 @@ export function FusionSiteNav({
   onMenuClose,
 }: FusionSiteNavProps) {
   const navRef = useRef<HTMLDivElement>(null)
-  const legacyModalRef = useRef<HTMLDivElement>(null)
-  const legacyTriggerRef = useRef<HTMLButtonElement>(null)
   const navigate = useNavigate()
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false)
-  const [legacyCcgModalOpen, setLegacyCcgModalOpen] = useState(false)
-  const legacyModalTitleId = useId()
-  const legacyModalDescId = useId()
-
-  const openLegacyCcgModal = useCallback(() => {
-    setMobileDrawerOpen(false)
-    onMenuClose()
-    setLegacyCcgModalOpen(true)
-  }, [onMenuClose])
-
-  const closeLegacyCcgModal = useCallback(() => {
-    setLegacyCcgModalOpen(false)
-    legacyTriggerRef.current?.focus()
-  }, [])
-
-  const continueToLegacyCcg = useCallback(() => {
-    setLegacyCcgModalOpen(false)
-    navigate(legacyCcgLink.href)
-  }, [navigate])
 
   const handleLinkClick = useCallback(
     (e: React.MouseEvent<Element>, href: string) => {
@@ -297,65 +273,6 @@ export function FusionSiteNav({
       document.body.style.overflow = prev
     }
   }, [mobileDrawerOpen])
-
-  useEffect(() => {
-    if (!legacyCcgModalOpen) return
-    const prev = document.body.style.overflow
-    const appRoot = document.getElementById('root') as (HTMLElement & { inert?: boolean }) | null
-    const prevAriaHidden = appRoot?.getAttribute('aria-hidden')
-    document.body.style.overflow = 'hidden'
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        closeLegacyCcgModal()
-        return
-      }
-
-      if (e.key !== 'Tab') return
-
-      const panel = legacyModalRef.current
-      const focusable = panel
-        ? Array.from(
-            panel.querySelectorAll<HTMLElement>(
-              'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
-            ),
-          )
-        : []
-
-      if (focusable.length === 0) {
-        e.preventDefault()
-        panel?.focus()
-        return
-      }
-
-      const first = focusable[0]
-      const last = focusable[focusable.length - 1]
-      const active = document.activeElement
-
-      if (e.shiftKey && active === first) {
-        e.preventDefault()
-        last.focus()
-      } else if (!e.shiftKey && active === last) {
-        e.preventDefault()
-        first.focus()
-      }
-    }
-    document.addEventListener('keydown', onKeyDown)
-    if (appRoot) {
-      appRoot.inert = true
-      appRoot.setAttribute('aria-hidden', 'true')
-    }
-    const firstAction = legacyModalRef.current?.querySelector<HTMLElement>('button:not([disabled]), a[href]')
-    firstAction?.focus()
-    return () => {
-      document.body.style.overflow = prev
-      document.removeEventListener('keydown', onKeyDown)
-      if (appRoot) {
-        appRoot.inert = false
-        if (prevAriaHidden == null) appRoot.removeAttribute('aria-hidden')
-        else appRoot.setAttribute('aria-hidden', prevAriaHidden)
-      }
-    }
-  }, [legacyCcgModalOpen, closeLegacyCcgModal])
 
   const activeItem = megaMenuItems.find((item) => item.id === activeMenu)
 
@@ -445,59 +362,15 @@ export function FusionSiteNav({
             <SearchIcon className="size-5 shrink-0" />
           </button>
 
-          <button
-            ref={legacyTriggerRef}
-            type="button"
-            className="fusion-site-nav__legacy-link"
-            onClick={openLegacyCcgModal}
+          <a
+            href="#get-help"
+            className="fusion-site-nav__legacy-link fusion-site-nav__get-help"
+            onClick={(e) => handleLinkClick(e, '#get-help')}
           >
-            {legacyCcgLink.label}
-          </button>
-
-          <FusionButton to="/learn/knowledge-center" accent size="small" className="fusion-site-nav__get-help">
             Get Help
-          </FusionButton>
+          </a>
         </div>
       </div>
-
-      {legacyCcgModalOpen
-        ? createPortal(
-            <div className="fusion-legacy-modal" role="presentation">
-              <button
-                type="button"
-                className="fusion-legacy-modal__backdrop"
-                aria-label="Close dialog"
-                onClick={closeLegacyCcgModal}
-              />
-              <div
-                ref={legacyModalRef}
-                className="fusion-legacy-modal__panel"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby={legacyModalTitleId}
-                aria-describedby={legacyModalDescId}
-                tabIndex={-1}
-              >
-                <h2 id={legacyModalTitleId} className="fusion-legacy-modal__title">
-                  Legacy CCG is unavailable
-                </h2>
-                <p id={legacyModalDescId} className="fusion-legacy-modal__message">
-                  The legacy CCG destination is not available from this experience. You can open the
-                  Knowledge Center for current guidance instead.
-                </p>
-                <div className="fusion-legacy-modal__actions">
-                  <FusionButton type="button" variation="ghost" onClick={closeLegacyCcgModal}>
-                    Cancel
-                  </FusionButton>
-                  <FusionButton type="button" variation="solid" onClick={continueToLegacyCcg}>
-                    Open Knowledge Center
-                  </FusionButton>
-                </div>
-              </div>
-            </div>,
-            document.body,
-          )
-        : null}
 
       {/* Mobile primary navigation (< md) */}
       <div
