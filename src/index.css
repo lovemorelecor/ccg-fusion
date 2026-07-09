@@ -4768,6 +4768,21 @@ h2.po-cta__heading {
 
 .explore-page #overview.init-hero {
   scroll-margin-top: var(--fusion-sticky-stack-top, 5.5rem);
+  /* Tall enough for the right-side orbit art; cover was cropping top/bottom. */
+  min-height: clamp(32rem, 58vh, 40rem);
+}
+
+.explore-page #overview.init-hero.init-hero--with-section-nav .init-hero__inner {
+  min-height: clamp(32rem, 58vh, 40rem);
+  box-sizing: border-box;
+  align-items: center;
+  padding-top: clamp(4.5rem, 7vw, 6rem);
+  /* Extra bottom room so section-nav overlap does not clip the orbits */
+  padding-bottom: clamp(6.25rem, 10vw, 8rem);
+}
+
+.explore-page #overview.init-hero .init-hero__bg-img {
+  object-position: 86% 46%;
 }
 
 .explore-page .kc-section[id],
@@ -5679,6 +5694,20 @@ h3.init-step__title {
 
   .init-hero__bg-img {
     object-position: 70% center;
+  }
+
+  .explore-page #overview.init-hero,
+  .explore-page #overview.init-hero.init-hero--with-section-nav .init-hero__inner {
+    min-height: clamp(26rem, 70vh, 34rem);
+  }
+
+  .explore-page #overview.init-hero.init-hero--with-section-nav .init-hero__inner {
+    padding-top: 3rem;
+    padding-bottom: 5.5rem;
+  }
+
+  .explore-page #overview.init-hero .init-hero__bg-img {
+    object-position: 72% 42%;
   }
 
   .init-hero__actions {
