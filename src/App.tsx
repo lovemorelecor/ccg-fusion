@@ -12,6 +12,7 @@ import NavDemoPage from './pages/NavDemoPage'
 import NavNewCcgPage from './pages/NavNewCcgPage'
 import NavOption2Page from './pages/NavOption2Page'
 import PageLayoutsPage from './pages/PageLayoutsPage'
+import LandingPageTemplateDemoPage from './pages/LandingPageTemplateDemoPage'
 import PageLayoutTemplatePage from './pages/PageLayoutTemplatePage'
 import ThreeColumnTemplateDemoPage from './pages/ThreeColumnTemplateDemoPage'
 import TwoColumnTemplateDemoPage from './pages/TwoColumnTemplateDemoPage'
@@ -39,6 +40,7 @@ function App() {
         <Route path="/resources/page-layouts" element={<PageLayoutsPage />} />
         <Route path="/resources/page-layouts/2-column" element={<TwoColumnTemplateDemoPage />} />
         <Route path="/resources/page-layouts/3-column" element={<ThreeColumnTemplateDemoPage />} />
+        <Route path="/resources/page-layouts/landing" element={<LandingPageTemplateDemoPage />} />
         <Route path="/resources/page-layouts/:slug" element={<PageLayoutTemplatePage />} />
       </Routes>
     </BrowserRouter>

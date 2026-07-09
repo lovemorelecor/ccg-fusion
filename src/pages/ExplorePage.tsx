@@ -1,6 +1,10 @@
 import { SkipNav } from '@cmsgov/ds-cms-gov'
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router-dom'
+import { ExploreSectionNav } from '../components/explore/ExploreSectionNav'
 import { FusionButton } from '../components/FusionButton'
+import { HideableInteriorBreadcrumbs } from '../components/layouts/HideableInteriorBreadcrumbs'
+import { InteriorSectionNavProvider } from '../components/layouts/InteriorSectionNav'
 import { exploreCardHrefByTitle } from '../data/platformPages'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
@@ -293,27 +297,29 @@ export default function ExplorePage() {
       <SkipNav href="#main-content">Skip to main content</SkipNav>
       <SiteHeader />
 
-      <main id="main-content" tabIndex={-1} ref={revealRef}>
-        {/* Sticky strip directly under site nav; CMS DS primary blues (KC pages unchanged). */}
-        <div className="kc-breadcrumb-bar kc-breadcrumb-bar--initiatives">
-          <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
-            <ol className="kc-breadcrumb-list">
-              <li>
-                <a href="/" className="kc-breadcrumb-link">Home</a>
-              </li>
-              <li aria-hidden="true" className="kc-breadcrumb-sep">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                  <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </li>
-              <li>
-                <span className="kc-breadcrumb-current">Explore</span>
-              </li>
-            </ol>
-          </nav>
-        </div>
+      <main id="main-content" tabIndex={-1} ref={revealRef} className="explore-page">
+        <InteriorSectionNavProvider>
+          <HideableInteriorBreadcrumbs className="kc-breadcrumb-bar kc-breadcrumb-bar--initiatives">
+            <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
+              <ol className="kc-breadcrumb-list">
+                <li>
+                  <Link to="/" className="kc-breadcrumb-link">
+                    Home
+                  </Link>
+                </li>
+                <li aria-hidden="true" className="kc-breadcrumb-sep">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </li>
+                <li>
+                  <span className="kc-breadcrumb-current">Explore</span>
+                </li>
+              </ol>
+            </nav>
+          </HideableInteriorBreadcrumbs>
 
-        <section className="init-hero">
+          <section id="overview" className="init-hero init-hero--with-section-nav" aria-labelledby="explore-hero-heading">
           <img
             src={exploreHeroBgUrl}
             alt=""
@@ -328,7 +334,7 @@ export default function ExplorePage() {
 
           <div className="init-hero__inner">
             <div className="init-hero__text">
-              <h1 className="init-hero__heading">
+              <h1 id="explore-hero-heading" className="init-hero__heading">
                 <span className="init-hero__heading-accent">Explore</span>{' '}
                 Platforms &amp; Services
               </h1>
@@ -341,13 +347,16 @@ export default function ExplorePage() {
                   View All Platforms
                   <ArrowIcon />
                 </FusionButton>
-                <FusionButton href="#contact" variation="ghost" onDark>
+                <FusionButton href="#learn-connect" variation="ghost" onDark>
                   Contact Team
                 </FusionButton>
               </div>
             </div>
           </div>
         </section>
+
+        <ExploreSectionNav />
+        </InteriorSectionNavProvider>
 
         {/* Content Area */}
         <div className="kc-content">
@@ -382,7 +391,7 @@ export default function ExplorePage() {
           </section>
 
           {/* Vertical timeline — CMS primary / accent / success tokens */}
-          <section className="kc-section kc-reveal">
+          <section className="kc-section kc-reveal" id="roadmap" aria-labelledby="explore-timeline">
             <h2 className="kc-section-heading" id="explore-timeline">
               Platform &amp; Service Roadmap
             </h2>
@@ -445,7 +454,7 @@ export default function ExplorePage() {
           </section>
 
           {/* What's Happening Section */}
-          <section className="kc-section kc-reveal">
+          <section className="kc-section kc-reveal" id="whats-happening">
             <h2 className="kc-section-heading">What&rsquo;s Happening?</h2>
             <p className="kc-section-subtitle">
               Stay informed with the latest updates and opportunities
@@ -466,7 +475,7 @@ export default function ExplorePage() {
           </section>
 
           {/* Learn & Connect */}
-          <section className="kc-section kc-reveal">
+          <section className="kc-section kc-reveal" id="learn-connect">
             <div className="init-bottom-grid">
               <div className="init-learn">
                 <div className="init-learn__icon">
@@ -524,7 +533,7 @@ export default function ExplorePage() {
         </div>
 
         {/* Getting Started Section */}
-        <section className="kc-getting-started kc-reveal">
+        <section id="getting-started" className="kc-getting-started kc-reveal">
           <div className="kc-getting-started__bg-orb kc-getting-started__bg-orb--gold" />
           <div className="kc-getting-started__bg-orb kc-getting-started__bg-orb--blue" />
           <div className="kc-getting-started__inner">
