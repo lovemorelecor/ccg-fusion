@@ -5,6 +5,7 @@ import { FusionButton } from '../components/FusionButton'
 import { useSectionReveal } from '../hooks/useSectionReveal'
 import { LandingAccordionSection } from '../components/layouts/landing/LandingAccordionSection'
 import { LandingCardGridSection } from '../components/layouts/landing/LandingCardGridSection'
+import { LandingHeroesSection } from '../components/layouts/landing/LandingHeroesSection'
 import { LandingCtaBandSection } from '../components/layouts/landing/LandingCtaBandSection'
 import { LandingLogoStripSection } from '../components/layouts/landing/LandingLogoStripSection'
 import { LandingSplitSection } from '../components/layouts/landing/LandingSplitSection'
@@ -18,6 +19,7 @@ import {
   landingCtaBand,
   landingFaq,
   landingFeatureCards,
+  landingHeroes,
   landingMetrics,
   landingPartners,
   landingSpotlightSections,
@@ -126,6 +128,13 @@ export default function LandingPageTemplateDemoPage() {
           <LandingTemplateSectionNav />
         </InteriorSectionNavProvider>
 
+        <LandingHeroesSection
+          id="heroes"
+          title={landingHeroes.title}
+          lede={landingHeroes.lede}
+          concepts={[...landingHeroes.concepts]}
+        />
+
         <LandingCardGridSection
           id="cards"
           title={landingFeatureCards.title}
@@ -138,8 +147,7 @@ export default function LandingPageTemplateDemoPage() {
           id="spotlight"
           title={landingSpotlightSections.title}
           lede={landingSpotlightSections.lede}
-          primary={landingSpotlightSections.primary}
-          reverse={landingSpotlightSections.reverse}
+          variants={[...landingSpotlightSections.variants]}
         />
 
         <LandingStatsSection

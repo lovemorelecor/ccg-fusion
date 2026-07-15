@@ -4,7 +4,7 @@ import { ScrollToTop } from './components/ScrollToTop'
 import HomePage from './pages/HomePage'
 import ExplorePage from './pages/ExplorePage'
 import FusionToolkitLandingPage from './pages/FusionToolkitLandingPage'
-import PlatformInteriorPage from './pages/PlatformInteriorPage'
+import PlatformRoutePage from './pages/PlatformRoutePage'
 import InitiativesPage from './pages/InitiativesPage'
 import KnowledgeCenterPage from './pages/KnowledgeCenterPage'
 import MavenIntegrationDevOpsPage from './pages/MavenIntegrationDevOpsPage'
@@ -29,7 +29,7 @@ function App() {
         <Route path="/learn/knowledge-center" element={<KnowledgeCenterPage />} />
         <Route path="/learn/knowledge-center/devops/maven-integration" element={<MavenIntegrationDevOpsPage />} />
         <Route path="/explore" element={<ExplorePage />} />
-        <Route path="/explore/platforms/:platformSlug" element={<PlatformInteriorPage />} />
+        <Route path="/explore/platforms/:platformSlug" element={<PlatformRoutePage />} />
         <Route path="/explore/fusion-toolkit" element={<FusionToolkitLandingPage />} />
         <Route path="/learn/initiatives" element={<InitiativesPage />} />
         <Route path="/learn/training-enablement" element={<TrainingEnablementPage />} />

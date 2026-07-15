@@ -12,6 +12,7 @@ export const landingTemplateHero = {
 
 export const landingTemplateSectionNavLinks = [
   { label: 'Overview', href: `${landingTemplatePath}#overview` },
+  { label: 'Heroes', href: `${landingTemplatePath}#heroes` },
   { label: 'Cards', href: `${landingTemplatePath}#cards` },
   { label: 'Spotlight', href: `${landingTemplatePath}#spotlight` },
   { label: 'Metrics', href: `${landingTemplatePath}#metrics` },
@@ -29,6 +30,41 @@ function sectionIdFromNavHref(href: string): string {
 export const landingTemplateSectionIds = landingTemplateSectionNavLinks.map((link) =>
   sectionIdFromNavHref(link.href),
 )
+
+export const landingHeroes = {
+  title: 'Heroes',
+  lede:
+    'Hero patterns for program and platform landing pages. Each concept shows a different treatment for background imagery, copy placement, and optional calls to action.',
+  concepts: [
+    {
+      id: 'image-copy',
+      label: 'Image + copy',
+      description:
+        'Contained hero with a background image, gradient scrim for readability, and left-aligned title and subtitle.',
+      variant: 'contained' as const,
+      title: 'Platforms & Services',
+      titleAccent: 'Explore',
+      subtitle:
+        'Discover cloud platforms, FUSION toolkit products, and shared services available on CMS Hybrid Cloud—built for secure, scalable, and compliant hosting.',
+      imageSrc: 'images/sections/initiatives-hero-cms-gov.png',
+    },
+    {
+      id: 'full-width-overlay',
+      label: 'Full width + CTAs',
+      description:
+        'Edge-to-edge cloud infrastructure photo, weighted to the right with a soft fade into the left for title, subtitle, and CTAs.',
+      variant: 'fullwidth' as const,
+      title: 'Hybrid Cloud Program',
+      titleAccent: 'CMS',
+      subtitle:
+        'Secure, scalable hosting for CMS applications across AWS, Azure, Google Cloud, and Oracle—with shared services, guardrails, and operational support.',
+      imageSrc: 'images/sections/hero-cloud-servers.jpg',
+      imageAlt: 'Rows of illuminated server racks in a modern cloud data center',
+      primaryCta: { label: 'Get started', href: '#get-started' },
+      secondaryCta: { label: 'View platforms', href: '/explore' },
+    },
+  ],
+}
 
 export const landingFeatureCards = {
   title: 'Card layouts',
@@ -68,23 +104,83 @@ export const landingFeatureCards = {
 }
 
 export const landingSpotlightSections = {
-  title: 'Split media layouts',
-  lede: 'Fifty-fifty sections with copy on one side and a visual placeholder on the other. Include a standard and reversed variant.',
-  primary: {
-    title: 'Text left, media right',
-    body: 'Lead with narrative copy, bullets, or CTAs on the left. Place product screenshots, diagrams, or photography in the media frame on the right.',
-    bullets: ['Section title and lede above the block', 'Primary and secondary actions supported', 'Responsive stack on smaller viewports'],
-    cta: 'Primary action',
-    secondaryCta: 'Secondary action',
-    mediaLabel: 'Media placeholder — 4:3 ratio',
-  },
-  reverse: {
-    title: 'Text right, media left',
-    body: 'Mirror the layout to create rhythm down the page. Useful when alternating storytelling and visual proof points.',
-    bullets: ['Reversed column order on large screens', 'Same typography and spacing tokens', 'Optional eyebrow or badge above title'],
-    cta: 'See example',
-    mediaLabel: 'Media placeholder — reversed',
-  },
+  title: 'Split media spotlights',
+  lede:
+    'Fifty-fifty layouts for storytelling and proof points. Switch tabs to preview a feature spotlight, standard copy blocks, or reversed media.',
+  variants: [
+    {
+      id: 'feature-spotlight',
+      label: 'Feature spotlight',
+      description:
+        'Unified spotlight card with a photographic media panel, badge and headline overlay, and a feature list with icons plus a full-width CTA.',
+      type: 'spotlight' as const,
+      badge: 'Enterprise Ready',
+      mediaTitle: 'Infrastructure built for mission-critical workloads',
+      imageSrc: 'images/sections/hero-cloud-servers.jpg',
+      imageAlt: 'Server racks and cabling in a modern cloud data center',
+      features: [
+        {
+          id: 'fedramp',
+          icon: 'shield' as const,
+          title: 'FedRAMP High authorized',
+          body: 'Pre-approved security controls mean you inherit compliance coverage from day one — no redundant audits.',
+        },
+        {
+          id: 'multi-cloud',
+          icon: 'server' as const,
+          title: 'Multi-cloud flexibility',
+          body: 'Deploy across AWS GovCloud and Azure Government with shared managed services like CI/CD, monitoring, and logging.',
+        },
+        {
+          id: 'scaling',
+          icon: 'bolt' as const,
+          title: 'Elastic on-demand scaling',
+          body: 'Scale up for peak periods and right-size when demand drops — with Financial Advisor guidance on cost optimization.',
+        },
+        {
+          id: 'ato',
+          icon: 'check' as const,
+          title: 'Continuous ATO support',
+          body: 'Your Technical Advisor monitors your ATO posture and flags issues before they become findings.',
+        },
+      ],
+      cta: { label: 'View all services', href: '/explore' },
+    },
+    {
+      id: 'copy-media',
+      label: 'Copy + media',
+      description:
+        'Lead with narrative copy, bullets, or CTAs on the left. Place product screenshots, diagrams, or photography in the media frame on the right.',
+      type: 'classic' as const,
+      title: 'Text left, media right',
+      body: 'Use this pattern when copy should set context before the visual. Primary and secondary actions are supported below the bullet list.',
+      bullets: [
+        'Section title and lede above the block',
+        'Primary and secondary actions supported',
+        'Responsive stack on smaller viewports',
+      ],
+      cta: 'Primary action',
+      secondaryCta: 'Secondary action',
+      mediaLabel: 'Media placeholder — 4:3 ratio',
+    },
+    {
+      id: 'copy-media-reverse',
+      label: 'Reversed',
+      description:
+        'Mirror the layout to create rhythm down the page. Useful when alternating storytelling and visual proof points.',
+      type: 'classic' as const,
+      reverse: true,
+      title: 'Text right, media left',
+      body: 'Reversed column order on large screens keeps the same typography and spacing tokens while flipping visual emphasis.',
+      bullets: [
+        'Reversed column order on large screens',
+        'Same typography and spacing tokens',
+        'Optional eyebrow or badge above title',
+      ],
+      cta: 'See example',
+      mediaLabel: 'Media placeholder — reversed',
+    },
+  ],
 }
 
 export const landingMetrics = {
