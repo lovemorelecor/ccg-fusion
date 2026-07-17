@@ -8,9 +8,13 @@ export type SharedServiceArticlePage = PlatformArticlePage & {
   availableIn: string[]
 }
 
-const SERVICE_HERO_IMAGE = 'images/sections/azure-commercial-hero.png'
-const SERVICE_HERO_ALT =
-  'Isometric cloud security illustration with glowing cubes and a locked shield'
+export const sharedServiceSectionHero = {
+  title: 'Shared Services',
+  summary:
+    'Explore our broad portfolio of CMS Hybrid Cloud approved managed technologies, tools, and services below. The list below contains both required services you get automatically to support your cloud hosting experience, and optional services you can use within your application for a more streamlined experience.',
+  imageSrc: 'images/sections/azure-commercial-hero.png',
+  imageAlt: 'Isometric cloud security illustration with glowing cubes and a locked shield',
+} as const
 
 export function sharedServiceArticlePath(categoryId: string, serviceId: string): string {
   return `${sharedServicesPath}/${categoryId}/${serviceId}`
@@ -25,27 +29,20 @@ export const ipAddressManagementArticle: SharedServiceArticlePage = {
   title: 'IP Address Management',
   heroSummary:
     'Managed IP addressing and allocation for CMS Hybrid Cloud. The CMS DIN team provides centralized control so applications receive unique, conflict-free addresses across approved environments.',
-  heroImageSrc: SERVICE_HERO_IMAGE,
-  heroImageAlt: SERVICE_HERO_ALT,
+  introParagraphs: [
+    'The CMS DIN team offers a vital service for managing private IP space within the CMS Cloud environment, ensuring that unique IPv4 addresses are allocated and tracked efficiently. By utilizing BTDiamond as the centralized database for IP address management, this solution simplifies the assignment and tracking of IPv4 addresses, ensuring consistency and preventing conflicts across the network.',
+  ],
+  heroImageSrc: sharedServiceSectionHero.imageSrc,
+  heroImageAlt: sharedServiceSectionHero.imageAlt,
   metadata: {
     updated: 'January 13, 2026',
     owner: 'CMS DIN Team',
     cloud: 'Network',
     readingTime: '4 min',
   },
-  sectionIds: ['about', 'benefits', 'associated-cost', 'availability', 'getting-started'],
+  sectionIds: ['overview', 'benefits', 'associated-cost', 'availability', 'getting-started'],
   lastUpdated: 'January 13, 2026',
   sections: [
-    {
-      id: 'about',
-      navLabel: 'About',
-      heading: 'About',
-      type: 'prose',
-      paragraphs: [
-        'IP Address Management is a required shared service for CMS Hybrid Cloud. It ensures every hosted workload receives a unique IP address that fits CMS network standards and avoids conflicts across accounts, VPCs, and hybrid connections.',
-        'The CMS DIN team manages IP addressing for CMS Hybrid Cloud customers. Teams request allocation through established intake channels; DIN assigns addresses, tracks inventory, and coordinates changes as environments grow or migrate.',
-      ],
-    },
     {
       id: 'benefits',
       navLabel: 'Benefits',

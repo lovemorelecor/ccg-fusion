@@ -1,7 +1,11 @@
 import { SkipNav } from '@cmsgov/ds-cms-gov'
 import { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import {
+  AboutHybridCloudHero,
+  AboutHybridCloudStickyNav,
+} from '../components/about-hybrid-cloud/AboutHybridCloudChrome'
 import { FusionButton } from '../components/FusionButton'
+import { InteriorSectionNavProvider } from '../components/layouts/InteriorSectionNav'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
 
@@ -64,14 +68,6 @@ const securityItems = [
   'Industry-leading encryption and data protection',
   'Regular security audits and compliance verification',
 ] as const
-
-function ArrowIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  )
-}
 
 function FeatureIcon({ type }: { type: string }) {
   const cls = 'po-feature-icon__svg'
@@ -156,65 +152,12 @@ export default function ProgramOverviewPage() {
       <SkipNav href="#main-content">Skip to main content</SkipNav>
       <SiteHeader />
 
-      <main id="main-content" tabIndex={-1} ref={revealRef} className="program-overview">
-        <header className="tpl-2col-hero-band">
-          <div className="tpl-2col-breadcrumb-bar">
-            <nav aria-label="Breadcrumb" className="kc-breadcrumb-inner">
-              <ol className="kc-breadcrumb-list">
-                <li>
-                  <Link to="/" className="kc-breadcrumb-link">
-                    Home
-                  </Link>
-                </li>
-                <li aria-hidden="true" className="kc-breadcrumb-sep">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </li>
-                <li>
-                  <a href="#about" className="kc-breadcrumb-link">
-                    About
-                  </a>
-                </li>
-                <li aria-hidden="true" className="kc-breadcrumb-sep">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </li>
-                <li>
-                  <span className="kc-breadcrumb-current">Program Overview</span>
-                </li>
-              </ol>
-            </nav>
-          </div>
+      <InteriorSectionNavProvider>
+        <main id="main-content" tabIndex={-1} ref={revealRef} className="program-overview">
+          <AboutHybridCloudHero currentLabel="Program Overview" />
+          <AboutHybridCloudStickyNav activeSectionId="program-overview" />
 
-          <section className="po-hero" aria-labelledby="po-hero-heading">
-            <div className="po-hero__glow" aria-hidden />
-            <div className="init-hero__inner po-hero__inner">
-              <div className="init-hero__text po-hero__text">
-                <h1 id="po-hero-heading" className="init-hero__heading po-hero__heading">
-                  Why Hybrid Cloud Hosting
-                </h1>
-                <p className="init-hero__description po-hero__description">
-                  CMS's Hybrid Cloud service provides all the benefits of cloud hosting – secure, scalable,
-                  and cost effective – along with the added benefits of regulatory and organizational control of
-                  a traditional data center.
-                </p>
-                <div className="init-hero__actions">
-                  <FusionButton href="#get-started" accent onDark>
-                    Get Started
-                    <ArrowIcon />
-                  </FusionButton>
-                  <FusionButton href="#critical-work" variation="ghost" onDark>
-                    Learn More
-                  </FusionButton>
-                </div>
-              </div>
-            </div>
-          </section>
-        </header>
-
-        <div className="kc-content">
+          <div className="kc-content">
           <section className="kc-section kc-reveal" id="critical-work">
             <h2 className="kc-section-heading po-section-heading">We know your work is critical.</h2>
             <p className="kc-section-subtitle po-section-lede">
@@ -313,7 +256,8 @@ export default function ProgramOverviewPage() {
             </FusionButton>
           </div>
         </section>
-      </main>
+        </main>
+      </InteriorSectionNavProvider>
 
       <SiteFooter />
     </>

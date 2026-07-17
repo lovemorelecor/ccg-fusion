@@ -173,7 +173,7 @@ const whatsHappening = [
     description:
       'Join us for weekly office hours every Thursday from 2-3 PM ET to get your questions answered.',
     cta: 'Join now',
-    borderColor: 'var(--color-accent-primary)',
+    borderColor: 'var(--color-primary)',
   },
 ]
 

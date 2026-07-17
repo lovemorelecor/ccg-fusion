@@ -6,8 +6,8 @@ export type FusionButtonProps = ButtonProps & {
   /** Internal SPA route (uses React Router navigation). */
   to?: string
   /**
-   * CMS.gov accent CTA: Dandelion 500 (`--fusion-dandelion` / `--color-accent-primary`) with primary blue text.
-   * On the child theme, `isAlternate` is a blue button — use `accent` for yellow CTAs.
+   * Accent CTA: primary blue fill with white text (508-safe).
+   * Formerly Dandelion yellow; remapped sitewide for contrast on light surfaces.
    */
   accent?: boolean
 }

@@ -7,7 +7,10 @@ import { PlatformArticleCtaBand } from '../components/layouts/platform-article/P
 import { PlatformArticleHero } from '../components/layouts/platform-article/PlatformArticleHero'
 import { PlatformArticleSectionNav } from '../components/layouts/platform-article/PlatformArticleSectionNav'
 import { PlatformArticleTableBlock } from '../components/layouts/platform-article/PlatformArticleTable'
-import { getSharedServiceArticle } from '../data/sharedServiceArticleContent'
+import {
+  getSharedServiceArticle,
+  sharedServiceSectionHero,
+} from '../data/sharedServiceArticleContent'
 import type { PlatformArticleSection } from '../data/platformArticleContent'
 import { sharedServicesPath } from '../data/sharedServicesContent'
 import { SiteFooter } from '../components/SiteFooter'
@@ -148,17 +151,24 @@ export default function SharedServiceArticlePage() {
     return <Navigate to={sharedServicesPath} replace />
   }
 
-  const navItems = article.sections.map((section) => ({
-    id: section.id,
-    label: section.navLabel,
-  }))
+  const navItems = [
+    { id: 'overview', label: 'Overview' },
+    ...article.sections.map((section) => ({
+      id: section.id,
+      label: section.navLabel,
+    })),
+  ]
 
   return (
     <>
       <SkipNav href="#main-content">Skip to main content</SkipNav>
       <SiteHeader />
 
-      <main id="main-content" tabIndex={-1} className="pa-page">
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="pa-page shared-service-article-page"
+      >
         <InteriorSectionNavProvider>
           <HideableInteriorBreadcrumbs className="kc-breadcrumb-bar kc-breadcrumb-bar--initiatives">
             <SharedServiceArticleBreadcrumbs
@@ -169,22 +179,48 @@ export default function SharedServiceArticlePage() {
           </HideableInteriorBreadcrumbs>
 
           <PlatformArticleHero
-            title={article.title}
-            summary={article.heroSummary}
-            metadata={{
-              updated: article.metadata.updated,
-              readingTime: article.metadata.readingTime,
-            }}
-            badge={article.status}
-            imageSrc={article.heroImageSrc}
-            imageAlt={article.heroImageAlt}
+            title={sharedServiceSectionHero.title}
+            summary={sharedServiceSectionHero.summary}
+            titleElement="p"
+            imageSrc={sharedServiceSectionHero.imageSrc}
+            imageAlt={sharedServiceSectionHero.imageAlt}
           />
 
           <PlatformArticleSectionNav sectionIds={article.sectionIds} items={navItems} />
         </InteriorSectionNavProvider>
 
-        <article className="pa-article" aria-label={article.title}>
+        <article className="pa-article" aria-labelledby="shared-service-article-title">
           <div className="pa-article__inner">
+            <header
+              id="overview"
+              className="pa-article__header"
+              tabIndex={-1}
+            >
+              <div className="pa-article__title-row">
+                <h1 id="shared-service-article-title" className="pa-article__h1">
+                  {article.title}
+                </h1>
+                {article.status ? (
+                  <span className="pa-article__badge">{article.status}</span>
+                ) : null}
+              </div>
+              <div className="pa-article__intro">
+                {(article.introParagraphs ?? [article.heroSummary]).map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                ))}
+              </div>
+              <dl className="pa-article__meta">
+                <div className="pa-article__meta-item">
+                  <dt>Updated</dt>
+                  <dd>{article.metadata.updated}</dd>
+                </div>
+                <div className="pa-article__meta-item">
+                  <dt>Reading time</dt>
+                  <dd>{article.metadata.readingTime}</dd>
+                </div>
+              </dl>
+            </header>
+
             {article.sections.map((section) => (
               <ArticleSection key={section.id} section={section} />
             ))}

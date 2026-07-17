@@ -14,6 +14,8 @@ import { triggerSectionSettle } from '../../hooks/useSectionReveal'
 export type InteriorSectionNavItem = {
   id: string
   label: string
+  /** Optional cross-page destination; defaults to the local section hash. */
+  href?: string
   icon?: ReactNode
 }
 
@@ -368,7 +370,7 @@ export function InteriorSectionNav({
                             if (node) linkRefs.current.set(item.id, node)
                             else linkRefs.current.delete(item.id)
                           }}
-                          href={`#${item.id}`}
+                          href={item.href ?? `#${item.id}`}
                           className={`interior-section-nav__link${variant === 'icon' ? ' interior-section-nav__link--icon' : ''}${isActive ? ' interior-section-nav__link--active' : ''}`}
                           aria-current={isActive ? 'true' : undefined}
                           onClick={(e) => {

@@ -7,7 +7,7 @@ import { PlatformArticleCtaBand } from '../components/layouts/platform-article/P
 import { PlatformArticleHero } from '../components/layouts/platform-article/PlatformArticleHero'
 import { PlatformArticleSectionNav } from '../components/layouts/platform-article/PlatformArticleSectionNav'
 import { PlatformArticleTableBlock } from '../components/layouts/platform-article/PlatformArticleTable'
-import { getPlatformArticleBySlug } from '../data/platformArticleContent'
+import { getPlatformArticleBySlug, platformSectionHero } from '../data/platformArticleContent'
 import type { PlatformArticleSection } from '../data/platformArticleContent'
 import { SiteFooter } from '../components/SiteFooter'
 import { SiteHeader } from '../components/SiteHeader'
@@ -135,21 +135,40 @@ export default function PlatformArticlePage({ articleSlug }: { articleSlug: stri
           </HideableInteriorBreadcrumbs>
 
           <PlatformArticleHero
-            title={article.title}
-            summary={article.heroSummary}
-            metadata={{
-              updated: article.metadata.updated,
-              readingTime: article.metadata.readingTime,
-            }}
-            imageSrc={article.heroImageSrc}
-            imageAlt={article.heroImageAlt}
+            title={platformSectionHero.title}
+            summary={platformSectionHero.summary}
+            titleElement="p"
+            imageSrc={platformSectionHero.imageSrc}
+            imageAlt={platformSectionHero.imageAlt}
+            imageMode="background"
           />
 
           <PlatformArticleSectionNav sectionIds={article.sectionIds} items={navItems} />
         </InteriorSectionNavProvider>
 
-        <article className="pa-article" aria-label={article.title}>
+        <article className="pa-article" aria-labelledby="pa-article-title">
           <div className="pa-article__inner">
+            <header className="pa-article__header">
+              <h1 id="pa-article-title" className="pa-article__h1">
+                {article.title}
+              </h1>
+              <div className="pa-article__intro">
+                {(article.introParagraphs ?? [article.heroSummary]).map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                ))}
+              </div>
+              <dl className="pa-article__meta">
+                <div className="pa-article__meta-item">
+                  <dt>Updated</dt>
+                  <dd>{article.metadata.updated}</dd>
+                </div>
+                <div className="pa-article__meta-item">
+                  <dt>Reading time</dt>
+                  <dd>{article.metadata.readingTime}</dd>
+                </div>
+              </dl>
+            </header>
+
             {article.sections.map((section) => (
               <ArticleSection key={section.id} section={section} />
             ))}

@@ -49,6 +49,7 @@ export type PlatformArticlePage = {
   slug: string
   title: string
   heroSummary: string
+  introParagraphs?: string[]
   heroImageSrc: string
   heroImageAlt?: string
   metadata: PlatformArticleMetadata
@@ -57,9 +58,21 @@ export type PlatformArticlePage = {
   lastUpdated: string
 }
 
-const PLATFORM_HERO_IMAGE = 'images/sections/azure-commercial-hero.png'
-const PLATFORM_HERO_ALT =
-  'Isometric cloud security illustration with glowing cubes and a locked shield'
+/**
+ * Shared section hero for all platform enablement pages.
+ * Matches legacy "Infrastructure Hosting Initiatives" chrome so WP can inherit
+ * this once at the parent/category level during content migration.
+ */
+export const platformSectionHero = {
+  title: 'Infrastructure Hosting Initiatives',
+  summary:
+    'The OIT Infrastructure Hosting Initiatives aim to build a stronger, smarter IT foundation. These efforts focus on maximizing hosting capabilities, enhancing operational efficiency, embracing innovative technologies, and ensuring financial transparency. By driving these priorities, OIT is creating a resilient, scalable environment that supports growth and delivers reliable, future-ready solutions.',
+  imageSrc: 'images/sections/platforms/platforms-hero-bg.png',
+  imageAlt: '',
+} as const
+
+const PLATFORM_HERO_IMAGE = platformSectionHero.imageSrc
+const PLATFORM_HERO_ALT = platformSectionHero.imageAlt
 
 const STANDARD_SECTION_IDS = [
   'what-why-how-when',
@@ -72,6 +85,7 @@ type PlatformArticleConfig = {
   slug: string
   title: string
   heroSummary: string
+  introParagraphs?: string[]
   metadata: PlatformArticleMetadata
   leads: PlatformArticleLeadItem[]
   approvedServices: PlatformArticleTable
@@ -87,6 +101,7 @@ function buildPlatformArticle(config: PlatformArticleConfig): PlatformArticlePag
     slug: config.slug,
     title: config.title,
     heroSummary: config.heroSummary,
+    introParagraphs: config.introParagraphs,
     heroImageSrc: PLATFORM_HERO_IMAGE,
     heroImageAlt: PLATFORM_HERO_ALT,
     metadata: config.metadata,
@@ -95,7 +110,7 @@ function buildPlatformArticle(config: PlatformArticleConfig): PlatformArticlePag
     sections: [
       {
         id: 'what-why-how-when',
-        navLabel: 'What, Why, How, and When',
+        navLabel: 'Overview',
         heading: 'What, Why, How, and When',
         type: 'leads',
         items: config.leads,
@@ -136,6 +151,10 @@ export const azureCommercialArticle = buildPlatformArticle({
   title: 'Azure Commercial Enablement',
   heroSummary:
     'A secure, scalable cloud hosting option within the CMS multi-cloud ecosystem for applications migrating from government-specific Azure environments to Azure Commercial.',
+  introParagraphs: [
+    'The CMS Azure Commercial environment is a secure, scalable cloud hosting option designed to support application modernization, cloud-native development, data and analytics initiatives, disaster recovery, hybrid integration, and other enterprise workloads. It provides Infrastructure as a Service (IaaS), Platform as a Service (PaaS), and Software as a Service (SaaS) capabilities so organizations can choose the hosting model that best fits their business and technical needs.',
+    'Within the CMS multi-cloud ecosystem, Azure Commercial serves as one of the enterprise cloud environment options available to support different workload, compliance, connectivity, and modernization needs. It complements broader CMS cloud strategies by providing a flexible hosting platform for applications and services that benefit from Azure-native capabilities, while still aligning to enterprise governance, security, and operational management practices used across the CMS cloud landscape.',
+  ],
   metadata: {
     updated: 'June 1, 2025',
     owner: 'Cloud Enablement Team',

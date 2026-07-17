@@ -48,20 +48,29 @@
   --fusion-blue-bright: var(--color-primary-light);
 
   /*
-   * Dandelion — CMS.gov system yellow palette (50–1000).
-   * Child theme `--color-accent-primary*` maps to 50, 100, 300, 500, 600, 700, 800.
+   * Accent remapped from CMS Dandelion yellow → primary blue for 508 / WCAG contrast.
+   * Yellow fails AA for text and thin UI chrome on white. Brand gold stays in the logo asset only.
    */
-  --fusion-dandelion-50: #fffce6;
-  --fusion-dandelion-100: #fff7b5;
-  --fusion-dandelion-200: #fff284;
-  --fusion-dandelion-300: #ffec52;
-  --fusion-dandelion-400: #ffe721;
-  --fusion-dandelion-500: #ffe400;
-  --fusion-dandelion-600: #e6cd07;
-  --fusion-dandelion-700: #b3a006;
-  --fusion-dandelion-800: #807204;
-  --fusion-dandelion-900: #4c4402;
-  --fusion-dandelion-1000: #191701;
+  --color-accent-primary-lightest: var(--color-primary-lightest);
+  --color-accent-primary-lighter: var(--color-primary-lighter);
+  --color-accent-primary-light: var(--color-primary-light);
+  --color-accent-primary: var(--color-primary);
+  --color-accent-primary-dark: var(--color-primary-darker);
+  --color-accent-primary-darker: var(--color-primary-darker);
+  --color-accent-primary-darkest: var(--color-primary-darkest);
+
+  /* Legacy dandelion aliases → same primary blues so UI chrome stays compliant */
+  --fusion-dandelion-50: var(--color-primary-lightest);
+  --fusion-dandelion-100: var(--color-primary-lighter);
+  --fusion-dandelion-200: var(--color-primary-light);
+  --fusion-dandelion-300: var(--color-primary-light);
+  --fusion-dandelion-400: var(--color-primary);
+  --fusion-dandelion-500: var(--color-primary);
+  --fusion-dandelion-600: var(--color-primary-darker);
+  --fusion-dandelion-700: var(--color-primary-darker);
+  --fusion-dandelion-800: var(--color-primary-darkest);
+  --fusion-dandelion-900: var(--color-primary-darkest);
+  --fusion-dandelion-1000: var(--color-primary-darkest);
   --fusion-dandelion-lightest: var(--fusion-dandelion-50);
   --fusion-dandelion-lighter: var(--fusion-dandelion-100);
   --fusion-dandelion-light: var(--fusion-dandelion-300);
@@ -69,6 +78,19 @@
   --fusion-dandelion-dark: var(--fusion-dandelion-600);
   --fusion-dandelion-darker: var(--fusion-dandelion-700);
   --fusion-dandelion-darkest: var(--fusion-dandelion-800);
+
+  /*
+   * CMS.gov ghost/solid/alt hover used yellow accent fill + blue text.
+   * With accent remapped to primary blue, keep the blue fill and switch hover/active
+   * label color to white so card CTAs and DS buttons stay 508-compliant.
+   */
+  --button-ghost__color--hover: var(--color-white);
+  --button-ghost__color--active: var(--color-white);
+  --button-ghost-alt__color--hover: var(--color-white);
+  --button-ghost-alt__color--active: var(--color-white);
+  --button-solid__color--hover: var(--color-white);
+  --button-solid-alt__color--hover: var(--color-white);
+  --button-alt__color--hover: var(--color-white);
 
   /* Sticky main nav (~py-3 + logo); breadcrumb bars sit directly beneath when scrolling */
   --fusion-nav-sticky-height: 5rem;
@@ -519,21 +541,29 @@ html.figma-capture .fusion-section-reveal.fusion-section-reveal--stagger .ft-gri
 
 /* ─── CMS.gov DS Button layout helpers ──────────────────────────────────── */
 
-/* Accent CTA: yellow background, primary blue text (theme tokens) */
+/* Accent CTA: primary blue fill with white text (508 contrast on light & dark) */
 .fusion-btn--accent.ds-c-button--solid,
 .fusion-btn--accent.ds-c-button--solid.ds-c-button--on-dark {
   --backgroundColor: var(--color-accent-primary);
   --borderColor: var(--color-accent-primary);
-  --color: var(--color-primary);
+  --color: var(--color-white);
   --backgroundColor--h: var(--color-accent-primary-dark);
   --borderColor--h: var(--color-accent-primary-dark);
-  --color--h: var(--color-primary-darkest);
+  --color--h: var(--color-white);
   --backgroundColor--a: var(--color-accent-primary-darker);
   --borderColor--a: var(--color-accent-primary-darker);
-  --color--a: var(--color-primary-darkest);
+  --color--a: var(--color-white);
   --backgroundColor--d: var(--color-gray-lightest);
   --borderColor--d: var(--color-gray-lighter);
   --color--d: var(--color-gray-dark);
+}
+
+/* Re-assert hover label color for <a> buttons (CMS link styles can win otherwise) */
+a.fusion-ds-button.ds-c-button:hover,
+a.fusion-ds-button.ds-c-button:focus,
+a.fusion-ds-button.ds-c-button:visited:hover {
+  color: var(--color--h, var(--color-white));
+  text-decoration: none;
 }
 
 .fusion-ds-button.ds-c-button--full,
@@ -577,19 +607,12 @@ html.figma-capture .fusion-section-reveal.fusion-section-reveal--stagger .ft-gri
   font-family: var(--font-lexend);
 }
 
-/* Hero accent line: CMS.gov yellow scale with vertical gradient + soft glow */
+/* Dark hero accent: white maintains AA contrast against the navy surface */
 .fusion-hero__headline-accent {
-  background-image: linear-gradient(
-    180deg,
-    var(--color-accent-primary-light) 0%,
-    var(--color-accent-primary) 38%,
-    var(--color-accent-primary) 62%,
-    var(--color-accent-primary-dark) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  filter: drop-shadow(0 0 16px color-mix(in srgb, var(--color-accent-primary) 38%, transparent));
+  background-image: none;
+  color: var(--color-white, #ffffff);
+  -webkit-text-fill-color: var(--color-white, #ffffff);
+  filter: none;
 }
 
 /* Align CMS USA Banner with Fusion nav row (same max width + horizontal padding) */
@@ -944,7 +967,7 @@ h2.fusion-mega-featured__title {
 
 /*
  * Featured card CTAs: global link styles can alter DS buttons.
- * Solid (navy/green) mega CTAs stay light-on-dark; accent (gold) uses blue text on yellow (508).
+ * Solid (navy/green) mega CTAs stay light-on-dark; accent CTAs use white text on primary blue (508).
  */
 .fusion-mega-featured__cta:not(.fusion-btn--accent),
 .fusion-mega-featured__cta:not(.fusion-btn--accent):visited {
@@ -960,11 +983,11 @@ h2.fusion-mega-featured__title {
 .fusion-mega-featured__cta.fusion-btn--accent.ds-c-button--solid,
 .fusion-mega-featured__cta.fusion-btn--accent.ds-c-button--solid:link,
 .fusion-mega-featured__cta.fusion-btn--accent.ds-c-button--solid:visited {
-  color: var(--color-primary-darker);
+  color: var(--color-white);
 }
 
 .fusion-mega-featured__cta.fusion-btn--accent.ds-c-button--solid:hover {
-  color: var(--color-primary-darkest);
+  color: var(--color-white);
 }
 
 /* ─── Site header: mobile primary navigation drawer (< md) ─────────────── */
@@ -1620,7 +1643,9 @@ h2.fusion-mega-featured__title {
 .fusion-academy .fusion-academy__cta-secondary.ds-c-button--ghost:focus {
   --borderColor: var(--color-primary-darker);
   --color: var(--color-primary-darker);
+  --color--h: var(--color-primary-darker);
   background-color: color-mix(in srgb, var(--color-primary-lightest) 35%, var(--color-white, #ffffff));
+  color: var(--color-primary-darker);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4879,7 +4904,8 @@ h2.po-cta__heading {
   justify-content: center;
 }
 
-h1.init-hero__heading {
+h1.init-hero__heading,
+p.init-hero__heading {
   font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
   font-size: clamp(1.75rem, 2.5vw + 0.5rem, 2.5rem);
   font-weight: 700;
@@ -4889,20 +4915,12 @@ h1.init-hero__heading {
   letter-spacing: -0.01em;
 }
 
-/* Match homepage hero: CMS.gov gold scale on accent word */
+/* Explore and Initiatives use dark navy heroes; blue text would fail contrast */
 .init-hero__heading-accent {
-  background-image: linear-gradient(
-    180deg,
-    var(--color-accent-primary-light) 0%,
-    var(--color-accent-primary) 38%,
-    var(--color-accent-primary) 62%,
-    var(--color-accent-primary-dark) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 14px color-mix(in srgb, var(--color-accent-primary) 34%, transparent));
+  background-image: none;
+  color: var(--color-white, #ffffff);
+  -webkit-text-fill-color: var(--color-white, #ffffff);
+  filter: none;
 }
 
 .init-hero__description {
@@ -4944,7 +4962,7 @@ h1.init-hero__heading {
 .init-btn--gold,
 .init-btn--gold:visited {
   background: var(--color-accent-primary);
-  color: var(--color-primary);
+  color: var(--color-white);
 }
 
 .init-btn--gold:hover {
@@ -4970,7 +4988,7 @@ h1.init-hero__heading {
 .init-btn--primary,
 .init-btn--primary:visited {
   background: var(--color-accent-primary);
-  color: var(--color-primary);
+  color: var(--color-white);
   box-shadow: 0 20px 12.5px rgba(0, 0, 0, 0.1), 0 8px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -5065,24 +5083,21 @@ h3.init-card__title {
   flex: 1;
 }
 
-.init-card__cta,
-.init-card__cta:visited {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.init-card__cta {
+  align-self: flex-start;
   margin-top: 16px;
-  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--color-primary);
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: gap 0.2s ease, color 0.2s;
 }
 
-.init-card__cta:hover {
-  gap: 8px;
-  color: var(--color-primary-darker);
+/* Anchor CTAs: keep white label on DS ghost hover fill (blue) for 508 */
+a.init-card__cta.ds-c-button--ghost:hover,
+a.init-card__cta.ds-c-button--ghost:focus,
+a.init-card__cta.ds-c-button--ghost:active,
+a.init-card__cta.ds-c-button--ghost:visited:hover,
+a.init-happening__cta.ds-c-button--ghost:hover,
+a.init-happening__cta.ds-c-button--ghost:focus,
+a.init-happening__cta.ds-c-button--ghost:active,
+a.init-happening__cta.ds-c-button--ghost:visited:hover {
+  color: var(--color-white);
   text-decoration: none;
 }
 
@@ -5189,8 +5204,8 @@ h3.init-card__title {
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  background: var(--color-accent-primary);
-  color: var(--color-primary-darkest);
+  background: var(--color-primary);
+  color: var(--color-white);
 }
 
 .init-timeline__label-cell--completed .init-timeline__q {
@@ -5337,7 +5352,7 @@ h3.init-timeline__hq-title {
 }
 
 .init-timeline__tag--accent {
-  background: color-mix(in srgb, var(--color-accent-primary) 22%, var(--color-white));
+  background: color-mix(in srgb, var(--color-primary) 18%, var(--color-white));
   color: var(--color-primary-darkest);
 }
 
@@ -5446,7 +5461,7 @@ h3.init-timeline__hq-title {
   font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
   font-size: 14px;
   font-weight: 700;
-  color: var(--color-accent-primary);
+  color: var(--color-primary-darker);
 }
 
 .init-happening__title {
@@ -5467,24 +5482,9 @@ h3.init-timeline__hq-title {
   flex: 1;
 }
 
-.init-happening__cta,
-.init-happening__cta:visited {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.init-happening__cta {
+  align-self: flex-start;
   margin-top: 16px;
-  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--color-primary);
-  text-decoration: none;
-  transition: gap 0.2s ease, color 0.2s;
-}
-
-.init-happening__cta:hover {
-  gap: 8px;
-  color: var(--color-primary-darker);
-  text-decoration: none;
 }
 
 .init-happening__cta svg {
@@ -7139,13 +7139,13 @@ ol.ddoc-breadcrumb-list li {
 .ddoc-footer-cta__col .fusion-btn--accent.ds-c-button--solid:visited {
   --backgroundColor: var(--color-accent-primary);
   --borderColor: var(--color-accent-primary);
-  --color: var(--color-primary);
+  --color: var(--color-white);
   --backgroundColor--h: var(--color-accent-primary-dark);
   --borderColor--h: var(--color-accent-primary-dark);
-  --color--h: var(--color-primary-darkest);
+  --color--h: var(--color-white);
   --backgroundColor--a: var(--color-accent-primary-darker);
   --borderColor--a: var(--color-accent-primary-darker);
-  --color--a: var(--color-primary-darkest);
+  --color--a: var(--color-white);
   text-decoration: none;
 }
 
@@ -10320,7 +10320,9 @@ h3.te-cta-card__title {
 .lpl-card .lpl-card__cta.ds-c-button--ghost:focus {
   --borderColor: var(--color-primary-darker);
   --color: var(--color-primary-darker);
+  --color--h: var(--color-primary-darker);
   background-color: color-mix(in srgb, var(--color-primary-lightest) 40%, var(--color-white));
+  color: var(--color-primary-darker);
   text-decoration: none;
 }
 
@@ -10985,13 +10987,53 @@ h3.te-cta-card__title {
   );
 }
 
+.pa-hero--background {
+  position: relative;
+  isolation: isolate;
+  background: var(--color-primary-darkest);
+}
+
+.pa-hero__background {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: right center;
+  pointer-events: none;
+}
+
+.pa-page .pa-hero--background .pa-hero__scrim {
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-primary-darkest) 78%, transparent) 0%,
+    color-mix(in srgb, var(--color-primary-darker) 48%, transparent) 38%,
+    color-mix(in srgb, var(--color-primary) 12%, transparent) 62%,
+    transparent 88%
+  );
+}
+
+.pa-page .pa-hero--background .pa-hero__inner {
+  position: relative;
+  z-index: 2;
+}
+
 /* Text alone sets hero height on content pages */
 .pa-page .pa-hero__text.init-hero__text {
   position: relative;
   z-index: 1;
-  max-width: min(36rem, 58%);
+  max-width: min(42rem, 64%);
   grid-column: unset;
   flex: unset;
+}
+
+.pa-page .pa-hero--background .pa-hero__text.init-hero__text {
+  width: min(64%, 52rem);
+  max-width: none;
 }
 
 .pa-hero__title-row {
@@ -10999,6 +11041,10 @@ h3.te-cta-card__title {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.75rem 1rem;
+}
+
+.pa-page p.pa-hero__title.init-hero__heading {
+  margin: 0;
 }
 
 .pa-hero__badge {
@@ -11026,7 +11072,7 @@ h3.te-cta-card__title {
   top: 50%;
   right: var(--fusion-site-padding-x);
   transform: translateY(-50%);
-  width: min(42%, 26rem);
+  width: min(34%, 23rem);
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -11049,6 +11095,19 @@ h3.te-cta-card__title {
   max-height: 13rem;
   object-fit: contain;
   object-position: center right;
+}
+
+@media (min-width: 768px) {
+  .shared-service-article-page .pa-hero__text.init-hero__text {
+    width: 70%;
+    max-width: 70%;
+    padding-right: 2rem;
+    box-sizing: border-box;
+  }
+
+  .shared-service-article-page .pa-hero__visual {
+    width: 28%;
+  }
 }
 
 .pa-hero__meta {
@@ -11111,6 +11170,86 @@ h3.te-cta-card__title {
   margin: 0 auto;
 }
 
+.pa-article__header {
+  margin-bottom: clamp(2rem, 4vw, 2.75rem);
+  padding-bottom: clamp(1.25rem, 2.5vw, 1.75rem);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-gray-lighter) 80%, var(--color-primary-lightest));
+}
+
+.pa-article__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.pa-article__h1 {
+  margin: 0;
+  font-family: var(--global__font-family, 'Open Sans', 'Inter', system-ui, sans-serif);
+  font-size: clamp(1.75rem, 2.8vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-primary-darkest);
+  letter-spacing: -0.01em;
+}
+
+.pa-article__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-white);
+  background: var(--fusion-blue-deep);
+}
+
+.pa-article__intro {
+  max-width: 62rem;
+  margin-top: 1rem;
+}
+
+.pa-article__intro p {
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--color-gray-darkest, #333333);
+}
+
+.pa-article__intro p + p {
+  margin-top: 0.875rem;
+}
+
+.pa-article__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  margin: 0.875rem 0 0;
+}
+
+.pa-article__meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.pa-article__meta-item dt {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-gray);
+}
+
+.pa-article__meta-item dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-gray-darkest);
+}
+
 @media (max-width: 767px) {
   .pa-page #overview.init-hero.init-hero--with-section-nav .init-hero__inner {
     padding-top: 1.5rem;
@@ -11161,7 +11300,7 @@ h3.te-cta-card__title {
   margin: 0;
   font-size: 1.125rem;
   line-height: 1.65;
-  color: var(--color-gray-dark);
+  color: var(--color-gray-darkest, #333333);
 }
 
 .pa-article__lead-label {
@@ -11195,7 +11334,8 @@ h3.te-cta-card__title {
 .pa-article__list {
   margin: 1rem 0 0;
   padding-left: 1.25rem;
-  color: var(--color-gray-dark);
+  font-size: 1.125rem;
+  color: var(--color-gray-darkest, #333333);
   line-height: 1.65;
 }
 
@@ -11262,7 +11402,7 @@ h3.te-cta-card__title {
 }
 
 .pa-table tbody td {
-  color: var(--color-gray-dark);
+  color: var(--color-gray-darkest, #333333);
 }
 
 .pa-table tbody tr:last-child th,
@@ -11768,6 +11908,577 @@ h3.te-cta-card__title {
 .ss-service-card__cta.ds-c-button--ghost:focus {
   color: var(--fusion-blue-deep);
   background: transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ABOUT — CUSTOMER SUPPORT TEAM / BENEFITS
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.about-hybrid-cloud-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.about-hybrid-cloud-hero-band--image {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: transparent;
+}
+
+.about-hybrid-cloud-hero-band--image > .about-hybrid-cloud-hero__background {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: right center;
+  pointer-events: none;
+}
+
+.about-hybrid-cloud-hero-band--image::after {
+  content: '';
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-primary-darkest) 78%, transparent) 0%,
+    color-mix(in srgb, var(--color-primary-darker) 48%, transparent) 38%,
+    color-mix(in srgb, var(--color-primary) 12%, transparent) 62%,
+    transparent 88%
+  );
+  pointer-events: none;
+}
+
+.about-hybrid-cloud-hero-band--image > .tpl-2col-breadcrumb-bar,
+.about-hybrid-cloud-hero-band--image > .about-hybrid-cloud-hero {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+}
+
+.about-hybrid-cloud-hero__background {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: right center;
+  pointer-events: none;
+}
+
+.about-hybrid-cloud-hero--image {
+  background: transparent;
+}
+
+.about-hybrid-cloud-hero--image::after {
+  display: none;
+}
+
+.cst-page .tpl-2col-hero-band {
+  position: relative;
+  overflow: hidden;
+}
+
+.cst-page .about-hybrid-cloud-hero .po-hero__glow,
+.cst-page .about-hybrid-cloud-hero .po-hero__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.cst-page .about-hybrid-cloud-hero .po-hero__inner {
+  min-height: clamp(17rem, 25vw, 21rem);
+  padding-top: clamp(2rem, 3vw, 3rem);
+  padding-right: var(--fusion-site-padding-x);
+  padding-bottom: clamp(2.25rem, 3.5vw, 3.5rem);
+  padding-left: var(--fusion-site-padding-x);
+}
+
+/* Override init-hero 6/12 grid so About hero copy spans ~64% */
+.cst-page .about-hybrid-cloud-hero .init-hero__text.po-hero__text {
+  grid-column: 1 / -1;
+  width: min(64%, 52rem);
+  max-width: none;
+}
+
+.cst-page .about-hybrid-cloud-hero h1.init-hero__heading.po-hero__heading,
+.cst-page .about-hybrid-cloud-hero h1.po-hero__heading {
+  max-width: none;
+  width: 100%;
+  font-size: clamp(1.875rem, 2.35vw + 0.35rem, 3rem);
+  line-height: 1.08;
+}
+
+.cst-page .about-hybrid-cloud-hero .init-hero__description.po-hero__description,
+.cst-page .about-hybrid-cloud-hero .po-hero__description {
+  max-width: none;
+  width: 100%;
+  font-size: clamp(0.9375rem, 0.45vw + 0.82rem, 1.125rem);
+  line-height: 1.55;
+}
+
+.cst-container {
+  width: min(100% - 3rem, 82rem);
+  margin-inline: auto;
+}
+
+.cst-container--narrow {
+  width: min(100% - 3rem, 68rem);
+}
+
+@media (min-width: 768px) {
+  .cst-page .about-hybrid-cloud-hero .po-hero__inner {
+    padding-right: var(--fusion-site-padding-x-md);
+    padding-left: var(--fusion-site-padding-x-md);
+  }
+}
+
+.cst-team {
+  padding: clamp(3.5rem, 6vw, 6rem) 0 clamp(4rem, 6vw, 6.5rem);
+  background: var(--color-white);
+}
+
+.cst-section-title {
+  margin: 0;
+  font-family: var(--font-lexend);
+  font-size: clamp(1.75rem, 2.2vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--color-primary-darkest);
+}
+
+.cst-team-map {
+  position: relative;
+  min-height: 28rem;
+  margin-top: 2.5rem;
+}
+
+.cst-team-map::before,
+.cst-team-map::after {
+  content: '';
+  position: absolute;
+  top: 5.25rem;
+  width: calc(50% - 12rem);
+  border-top: 1px dashed color-mix(in srgb, var(--color-primary-light) 35%, var(--color-gray-lighter));
+}
+
+.cst-team-map::before {
+  left: 12rem;
+}
+
+.cst-team-map::after {
+  right: 12rem;
+}
+
+.cst-team-map__image {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  z-index: 0;
+  display: block;
+  width: clamp(20rem, 36vw, 32rem);
+  height: auto;
+  object-fit: contain;
+  transform: translateX(-50%);
+}
+
+.cst-role-card {
+  position: absolute;
+  z-index: 1;
+  width: min(18rem, 24%);
+  padding: 0.25rem;
+  color: var(--color-gray-darkest);
+}
+
+.cst-role-card--hosting-coordinator {
+  top: 3rem;
+  left: 1.5rem;
+}
+
+.cst-role-card--technical-advisor {
+  top: 3rem;
+  right: 1.5rem;
+}
+
+.cst-role-card--financial-analyst {
+  bottom: 0;
+  left: 50%;
+  width: 19rem;
+  transform: translateX(-50%);
+}
+
+.cst-role-card__icon,
+.cst-accordion__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  color: var(--color-primary);
+  background: color-mix(in srgb, var(--color-primary-lightest) 76%, var(--color-white));
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary) 12%, transparent);
+}
+
+.cst-role-card__icon svg,
+.cst-accordion__icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+.cst-role-card h3 {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-lexend);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary-darker);
+}
+
+.cst-role-card p {
+  margin: 0.45rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-gray-darkest);
+}
+
+.cst-responsibilities {
+  padding: clamp(3.75rem, 6vw, 6rem) 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--color-primary-lightest) 45%, var(--color-white)) 0%,
+    color-mix(in srgb, var(--color-primary-lightest) 72%, var(--color-white)) 100%
+  );
+}
+
+.cst-accordion-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+.cst-accordion {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 24%, var(--color-gray-lighter));
+  border-radius: 0.75rem;
+  background: var(--color-white);
+  box-shadow: 0 5px 18px color-mix(in srgb, var(--color-primary-darkest) 6%, transparent);
+}
+
+.cst-accordion summary {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 4.25rem;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-lexend);
+  font-weight: 700;
+  color: var(--color-primary-darker);
+  cursor: pointer;
+  list-style: none;
+}
+
+.cst-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.cst-accordion summary:hover {
+  background: color-mix(in srgb, var(--color-primary-lightest) 42%, var(--color-white));
+}
+
+.cst-accordion summary:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: -3px;
+}
+
+.cst-accordion__icon {
+  width: 2.25rem;
+  height: 2.25rem;
+  box-shadow: none;
+}
+
+.cst-accordion__icon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.cst-accordion__chevron {
+  width: 1.25rem;
+  height: 1.25rem;
+  transition: transform 0.2s ease;
+}
+
+.cst-accordion:not([open]) .cst-accordion__chevron {
+  transform: rotate(180deg);
+}
+
+.cst-accordion__content {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.8fr) 2fr;
+  border-top: 1px solid var(--color-gray-lighter);
+}
+
+.cst-accordion__role,
+.cst-accordion__responsibilities {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1rem 1.25rem 1.25rem;
+}
+
+.cst-accordion__role {
+  border-right: 1px solid var(--color-gray-lighter);
+}
+
+.cst-accordion__role > span,
+.cst-accordion__responsibilities > span {
+  padding: 0.35rem 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary-darker);
+  background: color-mix(in srgb, var(--color-primary-lightest) 58%, var(--color-white));
+}
+
+.cst-accordion__role strong {
+  font-size: 0.875rem;
+  color: var(--color-gray-darkest);
+}
+
+.cst-accordion__responsibilities ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--color-gray-darkest);
+}
+
+.cst-updated {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.75rem 0 1.25rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-darkest);
+}
+
+.cst-feedback {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.85rem;
+  min-height: 4.5rem;
+  padding: 1.1rem 1.35rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary-light) 24%, var(--color-gray-lighter));
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-primary-darker);
+  background: color-mix(in srgb, var(--color-primary-lighter) 24%, var(--color-white));
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary-darkest) 5%, transparent);
+  text-decoration: none;
+}
+
+.cst-feedback:visited {
+  color: var(--color-primary-darker);
+}
+
+.cst-feedback:hover {
+  color: var(--color-primary-darkest);
+  background: color-mix(in srgb, var(--color-primary-lighter) 45%, var(--color-white));
+  text-decoration: underline;
+}
+
+.cst-feedback > svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.cst-feedback__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: var(--color-white);
+  background: var(--color-primary);
+}
+
+.cst-get-started {
+  padding: clamp(3.25rem, 5vw, 4.75rem) 0;
+  color: var(--color-white);
+  background: linear-gradient(120deg, var(--color-primary-darkest), var(--color-primary));
+}
+
+.cst-get-started .cst-container {
+  width: min(100% - 3rem, 68rem);
+  max-width: 68rem;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.cst-get-started h2 {
+  margin: 0;
+  font-family: var(--font-lexend);
+  font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+  color: var(--color-white);
+}
+
+.cst-get-started__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-top: 1.75rem;
+}
+
+.cst-get-started__grid > div {
+  padding: 0 2rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.26);
+}
+
+.cst-get-started__grid > div:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.cst-get-started__grid h3 {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-lexend);
+  font-size: 1.25rem;
+  color: var(--color-white);
+}
+
+.cst-get-started__grid p {
+  margin: 0;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cst-get-started__grid a:not(.ds-c-button) {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--color-white);
+}
+
+.cst-get-started .cst-get-started__button.ds-c-button--solid,
+.cst-get-started .cst-get-started__button.ds-c-button--solid:link,
+.cst-get-started .cst-get-started__button.ds-c-button--solid:visited {
+  --backgroundColor: #ffe400;
+  --borderColor: #ffe400;
+  --color: var(--color-primary-darkest);
+  --backgroundColor--h: #e6cd07;
+  --borderColor--h: #e6cd07;
+  --color--h: var(--color-primary-darkest);
+  --backgroundColor--a: #b3a006;
+  --borderColor--a: #b3a006;
+  --color--a: var(--color-primary-darkest);
+  color: var(--color-primary-darkest);
+  text-decoration: none;
+}
+
+.cst-get-started .cst-get-started__button.ds-c-button--solid:hover,
+.cst-get-started .cst-get-started__button.ds-c-button--solid:focus,
+.cst-get-started .cst-get-started__button.ds-c-button--solid:active {
+  color: var(--color-primary-darkest);
+}
+
+@media (max-width: 900px) {
+  .cst-page .about-hybrid-cloud-hero .init-hero__text.po-hero__text {
+    width: min(64%, 100%);
+  }
+
+  .cst-team-map {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    min-height: 0;
+  }
+
+  .cst-team-map::before,
+  .cst-team-map::after {
+    display: none;
+  }
+
+  .cst-team-map__image {
+    position: relative;
+    top: auto;
+    left: auto;
+    grid-column: 1 / -1;
+    justify-self: center;
+    transform: none;
+  }
+
+  .cst-role-card,
+  .cst-role-card--hosting-coordinator,
+  .cst-role-card--technical-advisor,
+  .cst-role-card--financial-analyst {
+    position: relative;
+    inset: auto;
+    width: auto;
+    transform: none;
+  }
+
+  .cst-role-card--financial-analyst {
+    grid-column: 1 / -1;
+    justify-self: center;
+    max-width: 22rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .cst-page .about-hybrid-cloud-hero .init-hero__text.po-hero__text {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .cst-page .about-hybrid-cloud-hero .po-hero__inner {
+    min-height: 18rem;
+  }
+
+  .about-hybrid-cloud-hero--image::after {
+    background: color-mix(in srgb, var(--color-primary-darkest) 88%, transparent);
+  }
+
+  .cst-container,
+  .cst-container--narrow {
+    width: min(100% - 2rem, 82rem);
+  }
+
+  .cst-team-map {
+    grid-template-columns: 1fr;
+  }
+
+  .cst-team-map__image,
+  .cst-role-card--financial-analyst {
+    grid-column: auto;
+  }
+
+  .cst-accordion__content,
+  .cst-get-started__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cst-accordion__role {
+    border-right: 0;
+    border-bottom: 1px solid var(--color-gray-lighter);
+  }
+
+  .cst-get-started__grid {
+    gap: 1.75rem;
+  }
+
+  .cst-get-started__grid > div,
+  .cst-get-started__grid > div:first-child {
+    padding: 0;
+    border: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

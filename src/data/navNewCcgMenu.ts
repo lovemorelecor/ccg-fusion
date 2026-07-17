@@ -124,9 +124,9 @@ export const navNewCcgMenuItems: NavMenuItem[] = sortMenuItems([
           type: 'list',
           links: [
             link('Program Overview', '/about/program-overview'),
-            link('Benefits', '/about/program-overview'),
-            link('Success Stories', '/about/program-overview'),
-            link('Contact Us', '/about/program-overview'),
+            link('Benefits', '/about/benefits'),
+            link('Success Stories', '/about/success-stories'),
+            link('Contact Us', '/about/contact-us'),
           ],
         },
       },

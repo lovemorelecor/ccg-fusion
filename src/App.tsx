@@ -19,6 +19,8 @@ import TwoColumnTemplateDemoPage from './pages/TwoColumnTemplateDemoPage'
 import SharedServicesPage from './pages/SharedServicesPage'
 import SharedServiceArticlePage from './pages/SharedServiceArticlePage'
 import ProgramOverviewPage from './pages/ProgramOverviewPage'
+import AboutHybridCloudSectionPage from './pages/AboutHybridCloudSectionPage'
+import BenefitsPage from './pages/BenefitsPage'
 import TrainingEnablementPage from './pages/TrainingEnablementPage'
 
 function App() {
@@ -44,6 +46,27 @@ function App() {
         <Route path="/nav-new-ccg" element={<NavNewCcgPage />} />
         <Route path="/nav-option-2" element={<NavOption2Page />} />
         <Route path="/about/program-overview" element={<ProgramOverviewPage />} />
+        <Route path="/about/benefits" element={<BenefitsPage />} />
+        <Route
+          path="/about/success-stories"
+          element={
+            <AboutHybridCloudSectionPage
+              sectionId="success-stories"
+              title="Success Stories"
+              description="Explore how teams use CMS Hybrid Cloud services to modernize applications, strengthen operations, and support mission-critical work."
+            />
+          }
+        />
+        <Route
+          path="/about/contact-us"
+          element={
+            <AboutHybridCloudSectionPage
+              sectionId="contact-us"
+              title="Contact Us"
+              description="Connect with the CMS Hybrid Cloud team for guidance on hosting, migration, shared services, and getting started."
+            />
+          }
+        />
         <Route path="/resources/page-layouts" element={<PageLayoutsPage />} />
         <Route path="/resources/page-layouts/2-column" element={<TwoColumnTemplateDemoPage />} />
         <Route path="/resources/page-layouts/3-column" element={<ThreeColumnTemplateDemoPage />} />
